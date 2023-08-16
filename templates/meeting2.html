@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title> 당신의 연인은 어디에? 홍픽 </title>
+        <style>
+            @import URL('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=스왑');
+            body {
+                font-family: 'Nanum Brush Script', 필기체;
+            }
+             @media screen and (min-width: 320px) and (max-width: 1439px) {
+
+                header {
+                    top:0; left:0; right:0;
+                    width:100%;
+                    position: fixed;
+                }
+                #navButton {
+                    display: grid;
+                    grid-template-columns: repeat(4, 4fr);
+                    grid-template-rows: 30px;
+                }
+                nav {
+                    display: flex;
+                    list-style-type: none;
+                    text-align: center;
+                    background-color:cornflowerblue;
+                    top:0; left:0; right:0;
+                }
+                li {
+                    display: inline-block;
+                    border-color: lightblue;
+                    text-align: left;
+                    padding: 0;
+                    margin: 0;
+                }
+                body {
+                    background-color:aliceblue;
+                }
+                a {
+                    color: white;
+                    text-decoration: none;
+                }
+                h2 {
+                    grid-template-columns: 1fr;
+                    text-align: center;
+
+                }
+                fieldset {
+                    border: none;
+                }
+                button {
+                    background-color: aliceblue;
+                    border-radius: 25%;
+                    border-color: aliceblue;
+                }
+                #button {
+                    text-align: center;
+                }
+                ul {
+                    padding-left: 0%;
+                }
+                p {
+                    text-align: left;
+                }
+                #one {
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <header>
+        <nav id="navButton">
+            <li class="navButtons"> <a href="home.html"> 홈 </a></li>
+            <li class="navButtons"> <a href="matching.html"> 매칭 </a></li>
+            <li class="navButtons"> <a href="Result.html"> 결과 </a></li>
+            <li class="navButtons"> <a href="menu.html"> 메뉴 </a></li>
+        </nav>
+    </header>
+    <main class="Hongik">
+        <body>
+            <br><br>
+            <h2> 필수 정보를 입력해주세요!</h2>
+            <form id="MyForm" action="home.html"  method = "post">
+                <fieldset>
+                    <ul>
+                        <li>
+                            <p>미팅 주선자의 직업: </p>
+                            <label> <input type=checkbox name="대학생" value="대학생" > 대학생 </label>
+                            <label> <input type=checkbox name="대학원생" value="대학원생"> 대학원생 </label>
+                            <label> <input type=checkbox name="취준생" value="취준생" > 취준생 </label>
+                            <label> <input type=checkbox name="직장인" value="직장인" > 직장인 </label>
+                        </li>
+                        <li>
+                            <p>미팅을 원하는 지역: </p>
+                            <label> <input type=checkbox name="서울서부" value="서울서부" > 서울 서부 </label>
+                            <label> <input type=checkbox name="서울동부" value="서울동부"> 서울 동부 </label>
+                            <br>
+                            <label> <input type=checkbox name="서울남부" value="서울남부" > 서울 남부 </label>
+                            <label> <input type=checkbox name="서울북부" value="서울북부" > 서울 북부 </label>
+                            </p>
+                        </li>
+                        <li>
+                            <p>미팅 참여자의 평균 나이: </p>
+                            <label> <input type=checkbox name="20살" value="20살"> 20살 </label>
+                            <label> <input type=checkbox name="21살" value="21살"> 21살 </label>
+                            <label> <input type=checkbox name="22살" value="22살"> 22살</label>
+                            <label> <input type=checkbox name="23살" value="23살"> 23살</label>
+                            <label> <input type=checkbox name="24살" value="24살"> 24살</label>
+                            <label> <input type=checkbox name="25살" value="25살"> 25살</label>
+                            <label> <input type=checkbox name="26살" value="26살"> 26살</label>
+                            <label> <input type=checkbox name="27살" value="27살"> 27살</label>
+                            <label> <input type=checkbox name="28살" value="28살"> 28살</label>
+                            <label> <input type=checkbox name="29살" value="29살"> 29살</label>
+                        </li>
+                    </ul>
+                </fieldset>
+                <p id="one">제출 버튼을 누르면 매칭 신청이 됩니다!</p>
+                <br><br>
+                <div id="button">
+                    <button type="submit"> 제출 </label>
+                </div>
+        </body>
+    </main>
+</html>
