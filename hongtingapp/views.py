@@ -89,3 +89,15 @@ def match_profiles(selected_category01, selected_values01, selected_category02, 
 #matches 에 q1객체와 q1객체 모두에 포함된 프로필 필터링 후 저장
     matches = UserProfile.objects.filter(q1 & q2)
     return matches
+
+
+def perform_matching(request):
+    # 임의의 선택 값을 사용하여 매칭 수행 예시
+    selected_category01 = 'age'
+    selected_values01 = ['a', 'b']
+    selected_category02 = 'mbti'
+    selected_values02 = ['a']
+
+    matched_profiles = match_profiles(selected_category01, selected_values01, selected_category02, selected_values02)
+
+    return render(request, 'YouInfo.html', {'matched_profiles': matched_profiles})

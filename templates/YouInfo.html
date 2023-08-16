@@ -68,28 +68,31 @@
             <li class="navButtons"> <a href="menu.html"> 메뉴 </a></li>
         </nav>
     </header>
-    <main class="YouInfo">
-        <body>
-            <br><br>
-            <h2>상대 정보</h>
-            <br><br>
-            <div id="Info">
-                <p>나이: <!-- user1.age --> </p> <!-- 이런 식으로 백에서 데이터 받아와서 출력 -->
-                <p>미팅 인원수: </p>
-                <p>직업: </p>
-                <p>학교와 학과: </p>
-                <p>mbti: </p>
-                <p>군/미필: </p>
-                <p>키: </p>
-                <p>체형: </p>
-                <p>유/무쌍: </p>
-                <p>얼굴상: </p>
-                <p>관심사: </p>
-            </div>
-            <div id="Info2">
-                <p>자유로운 자기소개: </p>
-            </div>
-        </body>
-    </main>
+<main class="YouInfo">
+    <body>
+        <br><br>
+        <h2>상대 정보</h2>
+        <br><br>
+        <div id="Info">
+            {% for profile in matched_profiles %}
+            <p>나이: {{ profile.age }}세</p>
+            <p>미팅 인원수: {{ profile.get_group_size_display }}</p>
+            <p>직업: {{ profile.occupation }}</p>
+            <p>학교와 학과: {{ profile.school_major }}</p>
+            <p>mbti: {{ profile.mbti }}</p>
+            <p>군/미필: {{ profile.military_service }}</p>
+            <p>키: {{ profile.height }}cm</p>
+            <p>체형: {{ profile.body_type }}</p>
+            <p>유/무쌍: {{ profile.get_double_eyelids_display }}</p>
+            <p>얼굴상: {{ profile.face_shape }}</p>
+            <p>관심사: {{ profile.interests }}</p>
+            {% endfor %}
+        </div>
+        <div id="Info2">
+            <p>자유로운 자기소개:</p>
+        </div>
+    </body>
+</main>
+
 
 </html>

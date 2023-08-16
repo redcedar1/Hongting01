@@ -1,4 +1,4 @@
-from django.db import models, transaction
+from django.db import models
 
 
 class UserProfile(models.Model):
@@ -14,8 +14,8 @@ class UserProfile(models.Model):
     hobby = models.CharField(max_length=100)  # 관심사
     self_intro = models.TextField()  # 자유로운 자기소개
 
-    def __str__(self):
-        return f"{self.age}세 {self.get_gender_display()} {self.get_group_size_display()}"
+    #def __str__(self):
+    #    return f"{self.age}세 {self.get_gender_display()} {self.get_group_size_display()}"
 
     class Meta:
         verbose_name = "사용자 프로필"
