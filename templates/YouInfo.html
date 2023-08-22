@@ -76,20 +76,18 @@
         <div id="Info">
             {% for profile in matched_profiles %}
             <p>나이: {{ profile.age }}세</p>
-            <p>미팅 인원수: {{ profile.get_group_size_display }}</p>
             <p>직업: {{ profile.occupation }}</p>
-            <p>학교와 학과: {{ profile.school_major }}</p>
+            <p>학과: {{ profile.major }}</p>
             <p>mbti: {{ profile.mbti }}</p>
-            <p>군/미필: {{ profile.military_service }}</p>
+            <p>군/미필: {{ profile.army }}</p>
             <p>키: {{ profile.height }}cm</p>
-            <p>체형: {{ profile.body_type }}</p>
-            <p>유/무쌍: {{ profile.get_double_eyelids_display }}</p>
-            <p>얼굴상: {{ profile.face_shape }}</p>
-            <p>관심사: {{ profile.interests }}</p>
+            <p>체형: {{ profile.body_face }}</p>
+            <p>유/무쌍: {{ profile.eyes }}</p>
+            <p>관심사: {{ profile.hobby }}</p>
             {% endfor %}
         </div>
         <div id="Info2">
-            <p>자유로운 자기소개:</p>
+            <p>자유로운 자기소개: {{ profile.self_intro }}</p>
         </div>
     </body>
 </main>
