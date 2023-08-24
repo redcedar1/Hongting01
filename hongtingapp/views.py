@@ -7,60 +7,50 @@ from .service import UserProfileService
 
 #소개팅에서 항목별로 값을 리스트로 받았을 때의 매칭 알고리즘
 def match_profiles(category01, values01, category02, values02, user_gender):
-    q1 = Q()
-    q2 = Q()
+    matches = UserProfile.objects.all()
 
-
-    #user_gender 값과 반대 성별인 상대방 중에서만 검사하도록 조건 부여
+    # 상대방 성별과 맞지 않는 경우만 필터링
     if user_gender == 'M':
-        q1 &= Q(gender='F')
+        matches = matches.filter(gender='F')
     elif user_gender == 'F':
-        q1 &= Q(gender='M')
+        matches = matches.filter(gender='M')
 
-    # 여자일 때에만 군필 여부 검사
-    #if user_gender == 'F':
-        #q1 &= Q(army__in=['군필', '면제'])
-
-    #첫 번째 항목의 값과 일치하는 프로필을 모두 q1객체에 저장
+    # 첫 번째 항목의 값과 일치하는 프로필 필터
     for value in values01:
         if category01 == 'mbti':
-            q1 |= Q(mbti=value)
+            matches = matches.filter(mbti=value)
         elif category01 == 'height':
-            q1 |= Q(height=value)
+            matches = matches.filter(height=value)
         elif category01 == 'age':
-            q1 |= Q(age=value)
+            matches = matches.filter(age=value)
         elif category01 == 'body':
-            q1 |= Q(body_face=value)
+            matches = matches.filter(body_face=value)
         elif category01 == 'eyes':
-            q1 |= Q(eyes=value)
+            matches = matches.filter(eyes=value)
         elif category01 == 'hobby':
-            q1 |= Q(hobby=value)
+            matches = matches.filter(hobby=value)
         else:
-            q1 |= Q(major=value)
+            matches = matches.filter(major=value)
 
-
-    #두 번째 항목의 값과 일치하는 프로필을 모두 q2객체에 저장
+    # 두 번째 항목의 값과 일치하는 프로필 필터
     for value in values02:
         if category02 == 'mbti':
-            q2 |= Q(mbti=value)
+            matches = matches.filter(mbti=value)
         elif category02 == 'height':
-            q2 |= Q(height=value)
+            matches = matches.filter(height=value)
         elif category02 == 'age':
-            q2 |= Q(age=value)
+            matches = matches.filter(age=value)
         elif category02 == 'body':
-            q2 |= Q(body=value)
+            matches = matches.filter(body=value)
         elif category02 == 'eyes':
-            q2 |= Q(eyes=value)
+            matches = matches.filter(eyes=value)
         elif category02 == 'hobby':
-            q2 |= Q(hobby=value)
+            matches = matches.filter(hobby=value)
         else:
-            q2 |= Q(major=value)
+            matches = matches.filter(major=value)
 
-
-
-    #첫 번째 항목의 값과 두 번째 항목의 값이 모두 일치하는 프로필을 모두 matches 에 저장
-    matches = UserProfile.objects.filter(q1 & q2)
     return matches
+
 
 #미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
 def match_info_profiles(category01, values01, category02, values02, user_gender, peoplenums):
