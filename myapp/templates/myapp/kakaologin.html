@@ -1,0 +1,34 @@
+<meta charset="utf-8">
+
+
+<!DOCTYPE html>
+<html lang="ko">{% load static %}
+  <link rel="stylesheet" href="{% static 'myapp/css/kakaologin.css' %}">
+  {% include 'myapp/index.html' %}
+  <main class="KakaoLogin">
+
+    <body>
+
+      {% if check %}
+        <!--로그인 되어 있으면-->
+        <div>
+          <!--<br><br> <h1>카카오 로그아웃</h1> <form action="/kakaoLogout" method="GET"> <input type="submit" value="카카오로그아웃 및 연결 끊기"/> </form>-->
+          <br><br><br><br>로그인 되어 있습니다
+        </div>
+      {% else %}
+        <!--로그인 안되어 있으면 -->
+        <br><br>
+        <h2>홍팅 사용을 위해
+          <br>카카오톡으로
+          <br>간편하게 로그인 해주세요</h2>
+        <br><br>
+        <div id="login">
+          <form method="GET">
+            <button type="submit" onclick=" form.action='/kakaoLoginLogic'">
+              <img src="/static/myapp/img/kakao_login_medium_narrow.png">
+            </div>
+          {% endif %}
+        </body>
+      </main>
+
+    </html>

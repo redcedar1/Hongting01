@@ -1,7 +1,0 @@
-/* 글꼴 정하기, 글자 크기, 글자색 정하기 */
-
-
-@import URL('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=스왑');
-
-header { font-family: 'Nanum Brush Script', 필기체;}
-body {font-family: 'Nanum Brush Script', 필기체;}

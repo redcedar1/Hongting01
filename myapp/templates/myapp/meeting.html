@@ -1,0 +1,77 @@
+<meta charset="utf-8">
+
+
+<!DOCTYPE html>
+<html lang="ko">{% load static %}
+  <link rel="stylesheet" href="{% static 'myapp/css/meeting.css' %}">
+  {% include 'myapp/index.html' %}
+  <main class="Hongik">
+
+    <body>
+      <br><br>
+      {% if error_message %}
+        <p>
+          <strong>{{ error_message }}</strong>
+        </p>
+      {% endif %}
+      <h2>미팅에 나갈<br>
+        <span style="color:rgb(241, 48, 128)">인원수</span>를 선택해주세요!<br><br></h2>
+      <!--평균 나이, 직업, 원하는 미팅 지역 등 선택-->
+      <script>
+        function checkAll() {
+          var checkboxes = document.getElementsByName("peoplenum");
+          var submit_peoplenum = [];
+
+          for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+              submit_peoplenum.push(checkboxes[i].value);
+            }
+          }
+
+          document
+            .getElementById("submit_peoplenum")
+            .value = submit_peoplenum.join(",");
+
+          if (submit_peoplenum.length === 0) {
+            alert("모든 필수 정보를 입력해주세요.");
+            return false; // 폼 제출 방지
+          }
+        
+          return true; // 폼 제출 허용
+        }
+      </script>
+      <form id="MyForm" action='/meeting/' method="post" onsubmit="return checkAll()">
+        <fieldset>
+          <ul>
+            <br>
+            <strong>미팅 인원수
+            </strong>
+            <br>
+            <span style="color:rgb(241, 48, 128)">
+              <p>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</p>
+            </span>
+            <input type="checkbox" name="peoplenum" id="change1" value="2">
+            <label for="change1">
+              2명
+            </label>
+            <input type="checkbox" name="peoplenum" id="change2" value="3">
+            <label for="change2">
+              3명
+            </label>
+            <input type="checkbox" name="peoplenum" id="change3" value="4">
+            <label for="change3">
+              4명
+            </label>
+          </ul>
+        </fieldset>
+        <input type="hidden" name="submit_peoplenum" id="submit_peoplenum">
+        <br>
+        <div id="button">
+          <button type="submit">
+            <strong>▶</strong>
+          </button>
+        </div>
+      </body>
+    </main>
+
+  </html>
