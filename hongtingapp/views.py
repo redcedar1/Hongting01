@@ -16,40 +16,51 @@ def match_profiles(category01, values01, category02, values02, user_gender):
         matches = matches.filter(gender='M')
 
     # 첫 번째 항목의 값과 일치하는 프로필 필터
+    values01_filter = Q()
     for value in values01:
         if category01 == 'mbti':
-            matches = matches.filter(mbti=value)
+            values01_filter |= Q(mbti=value)
         elif category01 == 'height':
-            matches = matches.filter(height=value)
+            values01_filter |= Q(height=value)
         elif category01 == 'age':
-            matches = matches.filter(age=value)
+            values01_filter |= Q(age=value)
         elif category01 == 'body':
-            matches = matches.filter(body_face=value)
+            values01_filter |= Q(body_face=value)
         elif category01 == 'eyes':
-            matches = matches.filter(eyes=value)
+            values01_filter |= Q(eyes=value)
         elif category01 == 'hobby':
-            matches = matches.filter(hobby=value)
+            values01_filter |= Q(hobby=value)
         else:
-            matches = matches.filter(major=value)
+            values01_filter |= Q(major=value)
 
     # 두 번째 항목의 값과 일치하는 프로필 필터
+    values02_filter = Q()
     for value in values02:
         if category02 == 'mbti':
-            matches = matches.filter(mbti=value)
+            values02_filter |= Q(mbti=value)
         elif category02 == 'height':
-            matches = matches.filter(height=value)
+            values02_filter |= Q(height=value)
         elif category02 == 'age':
-            matches = matches.filter(age=value)
+            values02_filter |= Q(age=value)
         elif category02 == 'body':
-            matches = matches.filter(body=value)
+            values02_filter |= Q(body=value)
         elif category02 == 'eyes':
-            matches = matches.filter(eyes=value)
+            values02_filter |= Q(eyes=value)
         elif category02 == 'hobby':
-            matches = matches.filter(hobby=value)
+            values02_filter |= Q(hobby=value)
         else:
-            matches = matches.filter(major=value)
+            values02_filter |= Q(major=value)
 
-    return matches
+    # 두 가지 항목 모두 일치하는 프로필 검색
+    both_values_matches = matches.filter(values01_filter & values02_filter)
+
+    # 만약 두 가지 항목 모두 일치하는 프로필이 없을 경우
+    if not both_values_matches.exists():
+        # 하나라도 일치하는 프로필 검색
+        either_value_matches = matches.filter(values01_filter | values02_filter)
+        return either_value_matches
+    else:
+        return both_values_matches
 
 
 #미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
