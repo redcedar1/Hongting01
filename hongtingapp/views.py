@@ -57,8 +57,10 @@ def match_info_profiles(category01, values01, category02, values02, user_gender,
     # 상대방 성별과 맞지 않는 경우만 필터링
     gender_filter = ~Q(gender=user_gender)
 
-    # 미팅 인원 수는 무조건 일치해야 함
-    peoplenums_filter = Q(peoplenums=peoplenums)
+    # 미팅 인원 수 중 하나라도 일치해야 함
+    peoplenums_filter = Q()
+    for num in peoplenums:
+        peoplenums_filter |= Q(peoplenums=num)
 
     # 첫 번째 항목의 값과 일치하는 프로필 필터
     values01_filter = Q()
@@ -80,14 +82,20 @@ def match_info_profiles(category01, values01, category02, values02, user_gender,
         else:
             values02_filter |= Q(ages=value)
 
-    # 모든 필터를 조합하여 결과를 가져옴
-    info_matches = Info.objects.filter(gender_filter & peoplenums_filter & values01_filter & values02_filter)
+    # 두 가지 항목 모두 일치하는 프로필 필터
+    both_values_filter = values01_filter & values02_filter
 
-    return info_matches
+    # 먼저 두 가지 항목 모두 일치하는 프로필 검색
+    both_values_matches = Info.objects.filter(gender_filter & peoplenums_filter & both_values_filter)
 
-
-
-
+    # 만약 두 가지 항목 모두 일치하는 프로필이 없을 경우
+    if not both_values_matches.exists():
+        # 하나라도 일치하는 프로필 검색
+        either_value_matches = Info.objects.filter(
+            gender_filter & peoplenums_filter & (values01_filter | values02_filter))
+        return either_value_matches
+    else:
+        return both_values_matches
 
 
 #소개팅 매칭 함수
@@ -118,7 +126,7 @@ def perform_info_matching(request):
     category02 = 'ages'
     values02 = ['21', '22', '23', '24', '25', '26', '27', '28', '29']
     user_gender = 'F'
-    peoplenums = '2'
+    peoplenums = ['2', '3']
     # 미팅 알고리즘을 돌린 후 조건에 맞는 프로필을 모두 matched_info_both 에 저장
     matched_info = match_info_profiles(category01, values01, category02, values02, user_gender, peoplenums)
 

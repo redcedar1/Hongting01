@@ -1,0 +1,15 @@
+h2 {
+    grid-template-columns: 1fr;
+    text-align: center;
+
+}
+button {
+    margin: auto;
+    background-color:rgb(247, 229, 232);
+    border: none;
+    display: block;
+    padding: 10px 10px;
+    font-weight: 600;
+    font-size: large;
+    line-height: 15px;
+}
