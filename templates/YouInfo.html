@@ -75,13 +75,15 @@
         <br><br>
         <div id="Info">
             {% for profile in matched_profiles %}
-            <p>나이: {{ profile.age }}세</p>
-            <p>직업: {{ profile.occupation }}</p>
-            <p>학과: {{ profile.major }}</p>
-            <p>mbti: {{ profile.mbti }}</p>
+
+            <p>성별: {{ profile.gender }}</p>
+            <p>나이: {{ profile.ages }}세</p>
+            <p>직업: {{ profile.jobs }}</p>
+            <p>학과: {{ profile.locations }}</p>
+            <p>mbti: {{ profile.peoplenums }}</p>
             <p>군/미필: {{ profile.army }}</p>
             <p>키: {{ profile.height }}cm</p>
-            <p>체형: {{ profile.body_face }}</p>
+            <p>체형: {{ profile.body }}</p>
             <p>유/무쌍: {{ profile.eyes }}</p>
             <p>관심사: {{ profile.hobby }}</p>
             {% endfor %}
