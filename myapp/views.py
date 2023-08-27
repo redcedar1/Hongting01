@@ -16,11 +16,24 @@ def index(request):
 
 
 def kakaologin(request):
-    context = {'check':False}
-    if request.session.get('access_token'): #만약 세션에 access_token이 있으면(==로그인 되어 있으면)
-        return redirect("/meeting/") #check 가 true, check는 kakaologin.html내에서 if문의 인자
+    context = {'check': False}
+    if request.session.get('access_token'):
+        access_token = request.session.get('access_token')
+        account_info = requests.get("https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"}).json()
+        kakao_id = account_info.get("id")
 
-    return render(request,"myapp/kakaologin.html",context)
+        try:
+            user_profile = Info.objects.get(kakao_id=kakao_id)  # 카카오톡 ID를 사용하여 사용자 정보 조회
+            context['user_profile'] = user_profile
+        except Info.DoesNotExist:
+            # 새로운 레코드 생성
+            user_profile = Info(kakao_id=kakao_id)
+            user_profile.save()
+            context['user_profile'] = user_profile
+
+        return render(request, "myapp/kakaologin.html", context)
+
+    return render(request, "myapp/kakaologin.html", context)
 
 def kakaoLoginLogic(request):
     _restApiKey = '60010e5242c371826d538b43def648c3' # 입력필요
@@ -41,7 +54,7 @@ def kakaoLoginLogicRedirect(request):
     request.session['access_token'] = _result['access_token']
     request.session.modified = True
     
-    return render(request, 'myapp/loginsuccess.html')
+    return render(request, 'myapp/meeting2.html')
 
 def kakaoLogout(request):
     
@@ -104,7 +117,7 @@ def meeting2(request):
             errormsg = {"error_message": "모든 필드에서 최소 한가지를 선택해 주세요."}
             return render(request, "myapp/meeting2.html", errormsg)
 
-        q = Info.objects.latest('id')#마지막으로 생성된 아이디에 저장??
+        q = Info.objects.latest('kakao_id')#마지막으로 생성된 아이디에 저장??
         q.jobs = job
         q.locations = location
         q.ages = age
