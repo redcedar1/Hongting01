@@ -14,3 +14,9 @@ class Info(models.Model):
     eyes = models.CharField(max_length=10, null=True, blank=True)
     face = models.CharField(max_length=10, null=True, blank=True)
     hobby = models.CharField(max_length=20, null=True, blank=True)
+    jobs = models.CharField(max_length=10, blank=True, null=True)
+    locations = models.CharField(max_length=100, blank=True, null=True)
+    ages = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.pk)

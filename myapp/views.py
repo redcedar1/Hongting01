@@ -156,17 +156,24 @@ def mbti(request):
 
 myinfo = {}
 @csrf_exempt
-def myinfo(request):
+def myinfo(request, id):
     access_token = request.session.get("access_token")
     account_info = requests.get("https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"}).json()
-    email = account_info.get("kakao_account", {}).get("email") # email이 있으면 email반환 없으면 빈칸 반환
+    email = account_info.get("kakao_account", {}).get("email")
     nickname = account_info.get("kakao_account", {}).get("nickname")
-    context = {'email' : email, 'nickname':nickname}
-    context.update(myinfo)
-    print(email)
-    print(nickname)
-    
-    return render(request, "myapp/myinfo.html",context)
+
+    # 이 부분에서 사용자의 id 값을 얻어온다고 가정
+    user_profile = Info.objects.get(pk=id)  # 사용자의 id 값 얻어옴
+
+    # id 값을 사용하여 사용자 정보 조회
+    try:
+        user_profile = Info.objects.get(id=id)
+    except Info.DoesNotExist:
+        user_profile = None  # 해당 id로 사용자 정보를 찾을 수 없는 경우
+
+    context = {'email': email, 'nickname': nickname, 'user_profile': user_profile}
+
+    return render(request, "myapp/myinfo.html", context)
 @csrf_exempt
 def success(request):
 
@@ -349,49 +356,46 @@ def match_profiles(category01, values01, category02, values02, user_gender):
 
 
 #미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
-def match_info_profiles(category01, values01, category02, values02, user_gender, peoplenum):
-    # 상대방과 성별이 다른 경우에만 필터링
+def match_info_profiles(ages, locations, jobs, user_gender, peoplenum):
     gender_filter = ~Q(gender=user_gender)
-
-    # 미팅 인원 수 중 하나라도 일치해야 함
     peoplenum_filter = Q()
     for num in peoplenum:
         peoplenum_filter |= Q(peoplenum=num)
 
-    # 첫 번째 항목의 값과 일치하는 프로필 필터
-    values01_filter = Q()
-    for value in values01:
-        if category01 == 'job':
-            values01_filter |= Q(job=value)
-        elif category01 == 'location':
-            values01_filter |= Q(location=value)
+    # 세 가지 조건을 각각 필터링
+    ages_filter = Q()
+    for age in ages:
+        ages_filter |= Q(ages=age)
+
+    locations_filter = Q()
+    for location in locations:
+        locations_filter |= Q(meetinglocation=location)
+
+    jobs_filter = Q()
+    for job in jobs:
+        jobs_filter |= Q(meetingjob=job)
+
+    # 모든 조건을 만족하는 프로필 필터
+    all_conditions_filter = ages_filter & locations_filter & jobs_filter
+
+    # 모든 조건을 만족하는 프로필 검색
+    all_conditions_matches = Info.objects.filter(gender_filter & peoplenum_filter & all_conditions_filter)
+
+    # 모든 조건을 만족하는 프로필이 없을 경우
+    if not all_conditions_matches.exists():
+        # 두 가지 조건을 만족하는 프로필 필터
+        two_conditions_filter = locations_filter & jobs_filter
+        two_conditions_matches = Info.objects.filter(gender_filter & peoplenum_filter & two_conditions_filter)
+
+        # 두 가지 조건을 만족하는 프로필이 없을 경우
+        if not two_conditions_matches.exists():
+            # 한 가지 조건을 만족하는 프로필 필터
+            one_condition_matches = Info.objects.filter(gender_filter & peoplenum_filter & (locations_filter | jobs_filter))
+            return one_condition_matches
         else:
-            values01_filter |= Q(submit_age=value)
-
-    # 두 번째 항목의 값과 일치하는 프로필 필터
-    values02_filter = Q()
-    for value in values02:
-        if category02 == 'job':
-            values02_filter |= Q(job=value)
-        elif category02 == 'location':
-            values02_filter |= Q(location=value)
-        else:
-            values02_filter |= Q(submit_age=value)
-
-    # 두 가지 항목 모두 일치하는 프로필 필터
-    both_values_filter = values01_filter & values02_filter
-
-    # 먼저 두 가지 항목 모두 일치하는 프로필 검색
-    both_values_matches = Info.objects.filter(gender_filter & peoplenum_filter & both_values_filter)
-
-    # 만약 두 가지 항목 모두 일치하는 프로필이 없을 경우
-    if not both_values_matches.exists():
-        # 하나라도 일치하는 프로필 검색
-        either_value_matches = Info.objects.filter(
-            gender_filter & peoplenum_filter & (values01_filter | values02_filter))
-        return either_value_matches
+            return two_conditions_matches
     else:
-        return both_values_matches
+        return all_conditions_matches
 
 
 # 소개팅 매칭 함수
@@ -407,9 +411,9 @@ def perform_matching(request):
         # 소개팅 알고리즘 돌린 후 조건에 맞는 프로필을 모두 matched_profiles 에 저장
         matched_profiles = match_profiles(category01, values01, category02, values02, user_gender)
 
-        return render(request, 'YouInfo.html', {'matched_profiles': matched_profiles})
+        return render(request, 'youinfo.html', {'matched_profiles': matched_profiles})
 
-    return render(request, 'YourMatchingForm.html')  # GET 요청에 대한 처리
+    return render(request, 'youinfo.html')  # GET 요청에 대한 처리
 
 # 미팅 매칭 함수
 def perform_info_matching(request):
@@ -425,8 +429,8 @@ def perform_info_matching(request):
         # 미팅 알고리즘을 돌린 후 조건에 맞는 프로필을 모두 matched_info 에 저장
         matched_info = match_info_profiles(category01, values01, category02, values02, user_gender, peoplenum)
 
-        return render(request, 'YouInfo.html', {'matched_profiles': matched_info})
+        return render(request, 'youinfo.html', {'matched_profiles': matched_info})
 
-    return render(request, 'YourInfoMatchingForm.html')  # GET 요청에 대한 처리
+    return render(request, 'youinfo.html')  # GET 요청에 대한 처리
 
 #카카오톡 아이디를 고유 값으로 받아 정보 분리해서 저장
