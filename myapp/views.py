@@ -104,7 +104,7 @@ def meeting2(request):
             errormsg = {"error_message": "모든 필드에서 최소 한가지를 선택해 주세요."}
             return render(request, "myapp/meeting2.html", errormsg)
 
-        q = Info.objects.latest('id')
+        q = Info.objects.latest('id')#마지막으로 생성된 아이디에 저장??
         q.jobs = job
         q.locations = location
         q.ages = age
@@ -162,7 +162,7 @@ def myinfo(request, id):
     email = account_info.get("kakao_account", {}).get("email")
     nickname = account_info.get("kakao_account", {}).get("nickname")
 
-    # 이 부분에서 사용자의 id 값을 얻어온다고 가정
+
     user_profile = Info.objects.get(pk=id)  # 사용자의 id 값 얻어옴
 
     # id 값을 사용하여 사용자 정보 조회
@@ -356,46 +356,34 @@ def match_profiles(category01, values01, category02, values02, user_gender):
 
 
 #미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
-def match_info_profiles(ages, locations, jobs, user_gender, peoplenum):
+def match_info_profiles(locations, ages, user_gender, peoplenum):
     gender_filter = ~Q(gender=user_gender)
     peoplenum_filter = Q()
     for num in peoplenum:
         peoplenum_filter |= Q(peoplenum=num)
 
-    # 세 가지 조건을 각각 필터링
-    ages_filter = Q()
-    for age in ages:
-        ages_filter |= Q(ages=age)
-
+    # 두 가지 조건을 각각 필터링
     locations_filter = Q()
     for location in locations:
         locations_filter |= Q(meetinglocation=location)
 
-    jobs_filter = Q()
-    for job in jobs:
-        jobs_filter |= Q(meetingjob=job)
+    ages_filter = Q()
+    for age in ages:
+        ages_filter |= Q(ages=age)
 
-    # 모든 조건을 만족하는 프로필 필터
-    all_conditions_filter = ages_filter & locations_filter & jobs_filter
+    # 두 가지 조건을 모두 만족하는 프로필 필터
+    two_conditions_filter = locations_filter & ages_filter
 
-    # 모든 조건을 만족하는 프로필 검색
-    all_conditions_matches = Info.objects.filter(gender_filter & peoplenum_filter & all_conditions_filter)
+    # 두 가지 조건을 모두 만족하는 프로필 검색
+    two_matches = Info.objects.filter(gender_filter & peoplenum_filter & two_conditions_filter)
 
-    # 모든 조건을 만족하는 프로필이 없을 경우
-    if not all_conditions_matches.exists():
-        # 두 가지 조건을 만족하는 프로필 필터
-        two_conditions_filter = locations_filter & jobs_filter
-        two_conditions_matches = Info.objects.filter(gender_filter & peoplenum_filter & two_conditions_filter)
-
-        # 두 가지 조건을 만족하는 프로필이 없을 경우
-        if not two_conditions_matches.exists():
-            # 한 가지 조건을 만족하는 프로필 필터
-            one_condition_matches = Info.objects.filter(gender_filter & peoplenum_filter & (locations_filter | jobs_filter))
-            return one_condition_matches
-        else:
-            return two_conditions_matches
+    # 두 가지 조건을 모두 만족하는 프로필이 없을 경우
+    if not two_matches.exists():
+        # 한 가지 조건을 만족하는 프로필 필터
+        one_matches = Info.objects.filter(gender_filter & peoplenum_filter & (locations_filter | ages_filter))
+        return one_matches
     else:
-        return all_conditions_matches
+        return two_matches
 
 
 # 소개팅 매칭 함수
@@ -416,20 +404,22 @@ def perform_matching(request):
     return render(request, 'youinfo.html')  # GET 요청에 대한 처리
 
 # 미팅 매칭 함수
-def perform_info_matching(request):
+def perform_info_matching(request, id):
     if request.method == 'POST':
-        # POST 요청으로 넘어온 데이터 받기
-        category01 = request.POST.get('category01')
-        values01 = request.POST.getlist('values01')
-        category02 = request.POST.get('category02')
-        values02 = request.POST.getlist('values02')
-        user_gender = request.POST.get('user_gender')
-        peoplenum = request.POST.getlist('peoplenum')
+        # 사용자의 id 값을 사용하여 데이터베이스에서 사용자 정보를 가져옴
+        user_profile = Info.objects.get(pk=id)
 
-        # 미팅 알고리즘을 돌린 후 조건에 맞는 프로필을 모두 matched_info 에 저장
-        matched_info = match_info_profiles(category01, values01, category02, values02, user_gender, peoplenum)
+        # 사용자 정보에서 locations와 ages 값을 얻어옴
+        locations = user_profile.locations
+        ages = user_profile.ages
+        user_gender = user_profile.gender
+        peoplenum = user_profile.peoplenum
 
-        return render(request, 'youinfo.html', {'matched_profiles': matched_info})
+
+        # 소개팅 알고리즘 돌린 후 조건에 맞는 프로필을 모두 matched_profiles 에 저장
+        matched_profiles = match_info_profiles('locations', locations, 'ages', ages, user_gender, peoplenum)
+
+        return render(request, 'youinfo.html', {'matched_profiles': matched_profiles})
 
     return render(request, 'youinfo.html')  # GET 요청에 대한 처리
 

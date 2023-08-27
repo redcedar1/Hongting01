@@ -9,7 +9,7 @@ class Info(models.Model):
     major = models.CharField(max_length=50, null=True, blank=True)
     mbti = models.CharField(max_length=4, null=True, blank=True)
     army = models.CharField(max_length=10, null=True, blank=True)
-    height = models.CharField(max_length=10, null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
     body = models.CharField(max_length=10, null=True, blank=True)
     eyes = models.CharField(max_length=10, null=True, blank=True)
     face = models.CharField(max_length=10, null=True, blank=True)
