@@ -17,7 +17,7 @@ class Info(models.Model):
     jobs = models.CharField(max_length=10, blank=True, null=True)
     locations = models.CharField(max_length=100, blank=True, null=True)
     ages = models.IntegerField(blank=True, null=True)
-    kakao_id = models.CharField(max_length=100, primary_key=True)  # kakao_id를 기본 키로 설정
+    #kakao_id = models.CharField(max_length=100, primary_key=True)  # kakao_id를 기본 키로 설정
 
     def __str__(self):
         return str(self.pk)
