@@ -221,6 +221,10 @@ def my(request, id):
 
         index2 = index + 1
         if index2 > 12:  # 모든 정보를 입력한 경우
+
+            if not all(value is not None for value in request.session.values()):
+                missing_values = [key for key, value in request.session.items() if value is None]
+                print("Missing values:", missing_values)
             # 세션에 저장된 정보를 하나의 Info 객체에 저장하고 세션 초기화
             myinfo = Info.objects.create(
                 age=request.session.get('age'),
