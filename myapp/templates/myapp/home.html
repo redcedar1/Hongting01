@@ -1,6 +1,5 @@
 <meta charset="utf-8">
 
-
 <!DOCTYPE html>
 <html lang="ko">{% load static %}
   {% include 'myapp/index.html' %}
@@ -24,24 +23,23 @@
           <strong>우리학교와</strong>
         </div>
         <div class="box4">
-          우리학교 사람과<br>만날 수 있어요!
+          정식 출시 후에 <br> 만나요!
+          <!--우리학교 사람과<br>만날 수 있어요!-->
         </div>
         <div class="box5" onclick="startFun3();">
           <strong>다른학교와</strong>
         </div>
         <div class="box6">
-          다른학교 사람과<br>만날 수 있어요!
+          정식 출시 후에 <br> 만나요!
+          <!--다른학교 사람과<br>만날 수 있어요!-->
         </div>
         <script>
           function startFun1() {
-            if (/* 유저 정보 x 이면 */
-            true) {
+            if ({{logged}} == '1') {
+              location.href = '/my/1';
+            }
+            else{
               location.href = '/kakaologin/';
-            } else if (/* 자기소개 없으면 */
-            false) {
-              location.href = '/my/';
-            } else {
-              location.href = '/meeting/';
             }
           }
 
@@ -51,7 +49,7 @@
               /* 카톡 api로 로그인하도록 창 연결 */
             } else if (/* 자기소개 없으면 */
             true) {
-              location.href = '/my/';
+              location.href = '/my/1';
             } else {
               location.href = '/choose/';
             }
@@ -64,7 +62,7 @@
               /* 카톡 api로 로그인하도록 창 연결 */
             } else if (/* 자기소개 없으면 */
             false) {
-              location.href = '/my/';
+              location.href = '/my/1';
             } else {
               location.href = '/choose/';
             }

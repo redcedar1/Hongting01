@@ -1,7 +1,7 @@
 
-            @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
             body {
-                font-family: 'Gaegu', cursive;
+                font-family: 'Gowun Dodum', sans-serif;
             }
              @media screen and (min-width: 320px) and (max-width: 1439px) {
         
@@ -31,7 +31,7 @@
                     line-height: 30px;
                 }
                 body {
-                    background-color:rgb(247, 229, 232);
+                    background-color:rgb(255, 249, 249);
                 }
                 a {
                     color: white;

@@ -31,9 +31,7 @@ urlpatterns = [
     path('hobby/',views.hobby,name='hobby'),
     path('major/',views.major,name='major'),
     path('mbti/',views.mbti,name='mbti'),
-    path('myinfo/<id>', views.myinfo, name='myinfo'),
+    path('myinfo/',views.myinfo,name='myinfo'),
     path('success/',views.success,name='success'),
-    #path('youinfo/',views.youinfo,name='youinfo')
-    path('youinfo/<id>', views.perform_info_matching, name='youinfo')
-
+    path('youinfo/',views.perform_info_matching,name='youinfo')
 ]

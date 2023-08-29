@@ -29,9 +29,8 @@ fieldset {
 
 p {
     display: inline-block;
-    border-radius: 25%;
+    font-size: small;
     text-align: center;
-    cursor : pointer;
 }
 
 button {
@@ -73,7 +72,6 @@ ul {
 #input2 {
     width:200px;
     height: 200px;
-    border-radius: 25%;
     border-top: 3px solid black;
     border-left: 3px solid black;
     border-right: 3px solid black;
@@ -100,28 +98,44 @@ input[type="text"] {
     background-color: rgb(249, 199, 207);
     border-style: groove;
 }
-label {
-    width: 100px;
-    height: 50px;
-    border: 5px solid rgb(249, 199, 207);
+input[type="number"] {
     background-color: rgb(249, 199, 207);
+    border-style: groove;
+}
+label {
+    width: 129px;
+    height: 50px;
+    border: 5px solid rgb(248, 200, 207);
+    background-color: rgb(248, 200, 207);
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
     line-height: 50px;
-    margin: 10px
+    margin: 3px;
 }
 input[type="radio"]:checked + label {
-    border-color: rgb(246, 124, 144);
-    background-color: rgb(246, 124, 144);
+    border-color: rgb(253, 156, 171);
+    background-color: rgb(253, 156, 171);
 }
 input[type="radio"] {
     display: none;
 }
 input[type="checkbox"]:checked + label {
-    border-color: rgb(246, 124, 144);
-    background-color: rgb(246, 124, 144);
+    border-color:  rgb(253, 156, 171);
+    background-color:  rgb(253, 156, 171);
 }
 input[type="checkbox"] {
     display: none;
+}
+input[type="range"] {
+    border: none;
+    accent-color: #6200ee;
+    opacity: 0.7;
+}
+#box {
+    background-color: white;
+                    border-color: rgb(248, 178, 188);
+                    border-style:groove;
+                    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
+                    border-radius: 10%;
 }

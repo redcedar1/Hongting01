@@ -25,11 +25,12 @@
     display: inline-block;
     background-color: white;
     border-color: rgb(248, 178, 188);
-    border-style:dashed;
+    border-style:groove;
     border-radius: 30%;
     text-align: center;
     opacity: 0;
     line-height: 63.2px;
+    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
 }
 #box6 {
     grid-column: 5/9;
@@ -37,11 +38,12 @@
     display: inline-block;
     background-color: white;
     border-color: rgb(248, 178, 188);
-    border-style:dashed;
+    border-style:groove;
     border-radius: 30%;
     text-align: center;
     opacity: 0;
     line-height: 63.2px;
+    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
 }
 #box7 {
     grid-column: 1/5;
@@ -79,7 +81,12 @@ button {
     line-height: 15px;
     background-color: white;
     border-color: rgb(248, 178, 188);
-    border-style:dashed;
+    border-style:groove;
+    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
     border-radius: 30%;
     text-align: center;
 }
+
+#one {
+    color:rgb(252, 165, 178);
+  }

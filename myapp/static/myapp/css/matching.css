@@ -25,10 +25,12 @@
     display: inline-block;
     background-color: white;
     border-color: rgb(248, 178, 188);
-    border-style:dashed;
+    border-style:groove;
+    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
     border-radius: 30%;
     text-align: center;
     opacity: 0;
+    pointer-events: none;
     line-height: 63.2px;
 }
 #box6 {
@@ -37,7 +39,8 @@
     display: inline-block;
     background-color: white;
     border-color: rgb(248, 178, 188);
-    border-style:dashed;
+    border-style:groove;
+    box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
     border-radius: 30%;
     text-align: center;
     opacity: 0;
@@ -70,3 +73,6 @@
 #navButton2 {
     background-color: rgb(248, 178, 188);
 }
+#one {
+    color:rgb(252, 165, 178);
+  }

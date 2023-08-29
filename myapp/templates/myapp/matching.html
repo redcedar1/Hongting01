@@ -1,6 +1,5 @@
 <meta charset="utf-8">
 
-
 <!DOCTYPE html>
 <html lang="ko">{% load static %}
 
@@ -9,39 +8,51 @@
 
   <script>
     function changeDay() {
-      if (/* day==1 */
-      false) 
+      /* if (// day==1
+      false)
         document
           .getElementById("inner1")
           .innerHTML = "<b><font color='violet'>1일차</font></b>";
-      else if (/* day==2 */
-      false) 
+      else if (// day==2
+      false)
         document
           .getElementById("inner1")
-          .innerHTML = "<b><font color='violet'>2일차</font></b>";
-      else 
+          .innerHTML = "<b><font color='violet'>2일차</font></b>"; */
+      if(/*매칭 안했으면*/false) {
         document
           .getElementById("inner1")
           .innerHTML = "<b>매칭을<font color='violet'> 신청</font> 해주세요!</b>";
       }
-    
+      if(/*매칭 했으면*/false) {
+        document
+        .getElementById("inner1")
+        .innerHTML = "<b>♥매칭이<font color='violet'> 진행</font> 중입니다♥</b>";
+      }
+      else if(/*매칭 됐으면*/true) {
+        document
+        .getElementById("inner1")
+        .innerHTML = "<b>♥매칭이<span id=one> 성사</span> 되었습니다♥</b>";
+      }
+      else if(/*매칭 안됐으면*/false) {
+        document
+        .getElementById("inner1")
+        .innerHTML = "<b>매칭이 성사되지 않았습니다</b>";
+      }
+
+    }
+
     function matchingResult() {
-      if (/* day==1 */
-      true) 
+      if (/* result=success */
+      false)
         document
           .getElementById("inner2")
-          .innerHTML = "<b>♥매칭이<font color='violet'> 진행</font> 중입니다♥</b>";
-      else if (/* result=success */
-      false) 
-        document
-          .getElementById("inner2")
-          .innerHTML = "<b>♥매칭이<font color='violet'> 성사</font> 되었습니다♥</b>";
+          .innerHTML = "<b>♥매칭이<span id=one> 성사</span> 되었습니다♥</b>";
       else if (/* result=fail */
-      true) 
+      false)
         document
           .getElementById("inner2")
           .innerHTML = "<b>매칭이 성사되지 않았습니다</b>";
-      else 
+      else
         document.write("")
     }
 
@@ -51,7 +62,7 @@
         document
           .getElementById("box5")
           .style
-          .opacity = 1;
+          .opacity = 0.5;
         document
           .getElementById("box6")
           .style
@@ -69,7 +80,7 @@
         document
           .getElementById("box5")
           .style
-          .opacity = 0;
+          .opacity = 0.5;
         document
           .getElementById("box6")
           .style
@@ -90,19 +101,17 @@
     <body>
       <div id="matching">
         <div class="box1">
-          <br>
+          <br><br>
           <div id="inner1"></div>
           <script>
             changeDay();
           </script>
         </div>
         <div class="box2">
-          <br>
           <div id="inner2"></div>
           <script>
             matchingResult();
           </script>
-          <br>
         </div>
         <div id="box5" onclick="Home();">
           <!-- 버튼이 box7과 반대로 눌려서 함수 둘이 바꿈 -->
@@ -135,10 +144,10 @@
         </script>
       </div>
       <script>
-        function go2() {
-          /* 백에 매칭 동의 누른 거 전달되게 하고 시간안에 비동의 안 하면 자동 동의 되게 */
+        /* function go2() {
+          //백에 매칭 동의 누른 거 전달되게 하고 시간안에 비동의 안 하면 자동 동의 되게
           location.href = '/matching2/';
-        }
+        } */
 
         function go3() {
           /* 백에 매칭 동의 누른 거 전달되게 하고 시간안에 비동의 안 하면 자동 동의 되게 */
