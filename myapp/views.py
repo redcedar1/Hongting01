@@ -111,14 +111,21 @@ def meeting(request):
         print("kakao_id : ", kakao_id)
 
         # 해당 kakao_id를 가진 사용자 정보 가져오기
-        user_info = get_object_or_404(Info, kakao_id=kakao_id)
+        # kakao_id를 조건으로 검색할 때는 get() 대신 filter() 메서드를 사용하고, 첫 번째 객체를 가져오도록 합니다.
+        user_info = Info.objects.filter(kakao_id=kakao_id).first()
 
-        # peoplenum과 avgage 정보 업데이트
-        user_info.peoplenum = ', '.join(peoplenum)  # 리스트를 문자열로 변환하여 저장
-        user_info.avgage = avgage
-        user_info.save()
-
-        count = user_info.id
+        if user_info is None:
+            # 사용자 정보가 없으면 새로 생성하고 저장
+            user_info = Info.objects.create(
+                kakao_id=kakao_id,
+                peoplenum=', '.join(peoplenum),
+                avgage=avgage
+            )
+        else:
+            # 사용자 정보가 이미 있으면 업데이트
+            user_info.peoplenum = ', '.join(peoplenum)
+            user_info.avgage = avgage
+            user_info.save()
         print(count)
         return redirect("/meeting2")  # /home/meeting2로 페이지 전달
 
@@ -137,7 +144,7 @@ def meeting2(request):
     global count
     if request.method == "POST":
         jobs = request.POST.getlist('submit_job')
-        age_values = request.POST.getlist('submit_age')
+        ages = request.POST.getlist('submit_age')
 
         if not jobs:
             errormsg = {"error_message": "직업을 선택해 주세요."}
@@ -145,11 +152,21 @@ def meeting2(request):
         kakao_id = account_info.get("id")
         print("kakao_id : ", kakao_id)
 
-        user_info = get_object_or_404(Info, kakao_id=kakao_id)
+        # kakao_id를 조건으로 검색할 때는 get() 대신 filter() 메서드를 사용하고, 첫 번째 객체를 가져오도록 합니다.
+        user_info = Info.objects.filter(kakao_id=kakao_id).first()
 
-        user_info.jobs = ', '.join(jobs)
-        user_info.ages = ', '.join(age_values)  # 여러 개의 연령대 값을 하나의 문자열로 저장
-        user_info.save()
+        if user_info is None:
+            # 사용자 정보가 없으면 새로 생성하고 저장
+            user_info = Info.objects.create(
+                kakao_id=kakao_id,
+                jobs=', '.join(jobs),
+                ages=', '.join(ages)
+            )
+        else:
+            # 사용자 정보가 이미 있으면 업데이트
+            user_info.jobs = ', '.join(jobs)
+            user_info.ages = ', '.join(ages)
+            user_info.save()
 
         return redirect("/matching/")
 
@@ -308,22 +325,37 @@ def my(request, id):
         index2 = index + 1
         if index2 > 11:  # 모든 정보를 입력한 경우
             # 세션에 저장된 정보를 하나의 Info 객체에 저장하고 세션 초기화
-            myinfo = Info.objects.create(
-
-                kakao_id=kakao_id,
-                age=request.session.get('age'),
-                sex=request.session.get('sex'),
-                job=request.session.get('job'),
-                school=request.session.get('school'),
-                major=request.session.get('major'),
-                mbti=request.session.get('mbti'),
-                army=request.session.get('army'),
-                height=request.session.get('height'),
-                body=request.session.get('body'),
-                eyes=request.session.get('eyes'),
-                face=request.session.get('face'),
-                hobby=hobby_list  # 리스트로 저장
-            )
+            user_info = Info.objects.filter(kakao_id=kakao_id).first()
+            if user_info:
+                user_info.age = request.session.get('age')
+                user_info.sex = request.session.get('sex')
+                user_info.job = request.session.get('job')
+                user_info.school = request.session.get('school')
+                user_info.major = request.session.get('major')
+                user_info.mbti = request.session.get('mbti')
+                user_info.army = request.session.get('army')
+                user_info.height = request.session.get('height')
+                user_info.body = request.session.get('body')
+                user_info.eyes = request.session.get('eyes')
+                user_info.face = request.session.get('face')
+                user_info.hobby = hobby_list
+                user_info.save()
+            else:
+                myinfo = Info.objects.create(
+                    kakao_id=kakao_id,
+                    age=request.session.get('age'),
+                    sex=request.session.get('sex'),
+                    job=request.session.get('job'),
+                    school=request.session.get('school'),
+                    major=request.session.get('major'),
+                    mbti=request.session.get('mbti'),
+                    army=request.session.get('army'),
+                    height=request.session.get('height'),
+                    body=request.session.get('body'),
+                    eyes=request.session.get('body'),
+                    face=request.session.get('face'),
+                    hobby=hobby_list
+                )
             request.session.clear()
             return redirect("/success/")  # 모든 정보를 입력한 후 성공 페이지로 이동
         else:
@@ -526,7 +558,7 @@ def perform_info_matching(request):
         print("kakao_id : ", kakao_id)
 
         # 예를 들어 사용자의 정보가 다음과 같다면:
-        user_info = Info.objects.get(kakao_id=1)
+        user_info = Info.objects.get(kakao_id=kakao_id)
         user_gender = user_info.sex
         peoplenum = user_info.peoplenum
         ages = user_info.ages.split(',')

@@ -13,7 +13,7 @@ class Info(models.Model):
     body = models.CharField(max_length=10, null=True, blank=True)
     eyes = models.CharField(max_length=10, null=True, blank=True)
     face = models.CharField(max_length=10, null=True, blank=True)
-    hobby = models.CharField(max_length=20, null=True, blank=True)
+    hobby = models.CharField(max_length=100, null=True, blank=True)
     jobs = models.CharField(max_length=100, blank=True, null=True)
     avgage = models.IntegerField(null=True, blank=True)
     ages = models.TextField(null=True, blank=True)  # 정수로 이루어진 리스트를 문자열로 저장
