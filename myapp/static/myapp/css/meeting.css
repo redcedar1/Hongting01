@@ -54,7 +54,7 @@ label {
     line-height: 50px;
     margin: 10px;
 }
-input[type="checkbox"]:checked + #one {
+input[type="radio"]:checked + #one {
     border-color: rgb(246, 124, 144);
     background-color: rgb(246, 124, 144);
 }

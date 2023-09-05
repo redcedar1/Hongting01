@@ -168,10 +168,22 @@ def meeting2(request):
             user_info.ages = ', '.join(ages)
             user_info.save()
 
-        return redirect("/matching/")
+        return redirect("/good/")
 
     count += 1
     return render(request, "myapp/meeting2.html")
+
+@csrf_exempt
+def good(request):
+
+    return render(request, "myapp/good.html")
+
+@csrf_exempt
+def go(request):
+
+    return render(request, "myapp/go.html")
+
+
 @csrf_exempt
 def alonechoose(request):
 
@@ -238,7 +250,7 @@ def myinfo(request):
     kakao_id = account_info.get("id")
     print("kakao_id : ", kakao_id)
 
-    user_profile = get_object_or_404(Info, kakao_id=kakao_id)#kakao_id 안받아짐
+    user_profile = get_object_or_404(Info, kakao_id=kakao_id)
 
     context = {
         'email': email,
@@ -251,6 +263,11 @@ def myinfo(request):
 def success(request):
 
     return render(request, "myapp/success.html")
+
+@csrf_exempt
+def fail(request):
+
+    return render(request, "myapp/fail.html")
 @csrf_exempt
 def youinfo(request):
 
@@ -319,11 +336,13 @@ def my(request, id):
         elif index == 11:
             # hobby 필드는 복수 선택 가능이므로 리스트로 저장
             hobby_list = request.POST.getlist("hobby")
+        elif index == 12:
+            request.session['free'] = request.POST.get("free")
         else:
             index = 1
 
         index2 = index + 1
-        if index2 > 11:  # 모든 정보를 입력한 경우
+        if index2 > 12:  # 모든 정보를 입력한 경우
             # 세션에 저장된 정보를 하나의 Info 객체에 저장하고 세션 초기화
             user_info = Info.objects.filter(kakao_id=kakao_id).first()
             if user_info:
@@ -339,6 +358,7 @@ def my(request, id):
                 user_info.eyes = request.session.get('eyes')
                 user_info.face = request.session.get('face')
                 user_info.hobby = hobby_list
+                user_info.free = request.session.get('free')
                 user_info.save()
             else:
                 myinfo = Info.objects.create(
@@ -354,7 +374,8 @@ def my(request, id):
                     body=request.session.get('body'),
                     eyes=request.session.get('body'),
                     face=request.session.get('face'),
-                    hobby=hobby_list
+                    hobby=hobby_list,
+                    free=request.session.get('free')
                 )
             request.session.clear()
             return redirect("/success/")  # 모든 정보를 입력한 후 성공 페이지로 이동
@@ -402,6 +423,13 @@ def matching3(request):
 def error(request):
 
     return render(request, "myapp/error.html")
+
+@csrf_exempt
+def use(request):
+
+    return render(request, "myapp/use.html")
+
+
 @csrf_exempt
 def result(request):
     access_token = request.session.get("access_token",None)

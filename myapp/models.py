@@ -18,6 +18,7 @@ class Info(models.Model):
     avgage = models.IntegerField(null=True, blank=True)
     ages = models.TextField(null=True, blank=True)  # 정수로 이루어진 리스트를 문자열로 저장
     kakao_id = models.CharField(max_length=100, blank=True, null=True)  # kakao_id를 기본 키로 설정
+    free = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return str(self.pk)

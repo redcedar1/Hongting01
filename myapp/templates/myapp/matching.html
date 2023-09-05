@@ -23,7 +23,7 @@
           .getElementById("inner1")
           .innerHTML = "<b>매칭을<font color='violet'> 신청</font> 해주세요!</b>";
       }
-      if(/*매칭 했으면*/false) {
+      else if(/*매칭 했으면*/false) {
         document
         .getElementById("inner1")
         .innerHTML = "<b>♥매칭이<font color='violet'> 진행</font> 중입니다♥</b>";
@@ -121,7 +121,7 @@
           </p>
           <!-- 카톡 아이디 알려주는 창으로 -->
         </div>
-        <div id="box6" onclick="/* 백에서 리턴값 fail로 바꿔주고 아님 여기서 바로 값 바꾸고*/ meetCheck()">
+        <div id="box6" onclick="/* 백에서 리턴값 fail로 바꿔주고 아님 여기서 바로 값 바꾸고*/ Home();">
           <p>
             <strong>미팅 결과
               <span style="color:rgb(241, 48, 128); text-emphasis-style: dot;">확인</span>!</strong>
@@ -130,7 +130,7 @@
         <div id="box7" onclick="go2();">
           <p>
             <strong>매칭
-              <span style="color:rgb(241, 48, 128); text-emphasis-style: dot;">재진행</span></strong>
+              <span style="color:rgb(241, 48, 128); text-emphasis-style: dot;">정보 변경</span></strong>
           </p>
         </div>
         <div id="box8" onclick="go3();/*매칭 멈추기 상태 함수(백엔드)*/">
@@ -155,7 +155,7 @@
         }
 
         function Home() {
-          location.href = '/home/';
+          location.href = '/meeting/';
         }
 
         function goInfo() {

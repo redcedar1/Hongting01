@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">{% load static %}
+  <link rel="stylesheet" href="{% static 'myapp/css/kakaoid.css' %}">
+  {% include 'myapp/index.html' %}
+  <main class="AloneChoose2">
+
+    <body>
+      <br><br><br><br><br>
+      <p>마지막으로 매칭 후 연락을 위한</p>
+      <p>카카오톡 아이디를 입력해주세요.</p>
+      <p>정확한 카카오톡 아이디를 입력하지 않으면</p>
+      <p>매칭 후 연락이 안 올 수 있습니다.</p>
+
+      <input type="text" name="kakaoid" placeholder="정확한 ID 입력" size=10 required></input>
+
+      <p>방법</p>
+
+      <img src="/static/myapp/img/kakaoid 1">
+      <p>카카오톡 설정창으로 들어가기</p>
+      <img src="/static/myapp/img/kakaoid 2">
+      <p>프로필 관리 누르기</p>
+      <img src="/static/myapp/img/kakaoid 3">
+      <p>카카오톡 ID 누르기</p>
+      <img src="/static/myapp/img/kakaoid 4">
+      <p>ID 검색 허용하기</p>
+
+    </body>
+    </main>
+</html>

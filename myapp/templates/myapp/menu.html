@@ -19,12 +19,24 @@
             <strong>정보 확인</strong>
           </p>
         </div>
-        <div class="box3">
+        <div class="box3" onclick="gogo()">
+          <strong>왓팅 사용법 보기</strong>
+        </div>
+        <div class="box4" onclick="logout()">
+          <p>로그아웃</p>
+        </div>
+        <div class="box5">
           <p>회원 탈퇴</p>
         </div>
         <script>
           function goInfo() {
             location.href = '/myinfo/';
+          }
+          function gogo() {
+            location.href = '/use/';
+          }
+          function logout() {
+            location.href = '/loginoutsucces/';
           }
         </script>
       </body>
