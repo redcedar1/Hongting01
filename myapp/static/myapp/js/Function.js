@@ -68,36 +68,36 @@ function validateForm(count) {
         const mbtiInput2 = document.querySelectorAll("[name='mbti2']");
         const mbtiInput3 = document.querySelectorAll("[name='mbti3']");
         const mbtiInput4 = document.querySelectorAll("[name='mbti4']");
-    
+
         let selectedmbti1 = false;
         let selectedmbti2 = false;
         let selectedmbti3 = false;
         let selectedmbti4 = false;
-    
+
         mbtiInput1.forEach(input => {
             if (input.checked) {
                 selectedmbti1 = true;
             }
         });
-    
+
         mbtiInput2.forEach(input => {
             if (input.checked) {
                 selectedmbti2 = true;
             }
         });
-    
+
         mbtiInput3.forEach(input => {
             if (input.checked) {
                 selectedmbti3 = true;
             }
         });
-    
+
         mbtiInput4.forEach(input => {
             if (input.checked) {
                 selectedmbti4 = true;
             }
         });
-    
+
         if (!(selectedmbti1 && selectedmbti2 && selectedmbti3 && selectedmbti4)) {
             alert("MBTI를 입력해주세요.");
             return false;

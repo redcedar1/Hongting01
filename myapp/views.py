@@ -10,19 +10,21 @@ from django.template import loader
 from django.http import HttpResponse, JsonResponse, HttpResponseForbidden
 
 # Create your views here.
-  
+
 count = 0
+
+
 @csrf_exempt
 def index(request):
-   return redirect("/home")
-
+    return redirect("/home")
 
 
 def kakaologin(request):
     context = {'check': False}
     if request.session.get('access_token'):
         access_token = request.session.get('access_token')
-        account_info = requests.get("https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"}).json()
+        account_info = requests.get("https://kapi.kakao.com/v2/user/me",
+                                    headers={"Authorization": f"Bearer {access_token}"}).json()
         kakao_id = account_info.get("id")
         print("kakao_id : ", kakao_id)
         try:
@@ -34,19 +36,21 @@ def kakaologin(request):
             user_profile.save()
             context['user_profile'] = user_profile
 
-        return redirect("/home") #로그인 되어있으면 home페이지로
+        return redirect("/home")  # 로그인 되어있으면 home페이지로
 
     return render(request, "myapp/kakaologin.html", context)
 
+
 def kakaoLoginLogic(request):
-    _restApiKey = '60010e5242c371826d538b43def648c3' # 입력필요
+    _restApiKey = '60010e5242c371826d538b43def648c3'  # 입력필요
     _redirectUrl = 'http://127.0.0.1:8000/kakaoLoginLogicRedirect'
     _url = f'https://kauth.kakao.com/oauth/authorize?client_id={_restApiKey}&redirect_uri={_redirectUrl}&response_type=code'
     return redirect(_url)
 
+
 def kakaoLoginLogicRedirect(request):
     _qs = request.GET['code']
-    _restApiKey = '60010e5242c371826d538b43def648c3' # 입력필요
+    _restApiKey = '60010e5242c371826d538b43def648c3'  # 입력필요
     _redirect_uri = 'http://127.0.0.1:8000/kakaoLoginLogicRedirect'
     _url = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={_restApiKey}&redirect_uri={_redirect_uri}&code={_qs}'
     _res = requests.post(_url)
@@ -57,7 +61,7 @@ def kakaoLoginLogicRedirect(request):
     request.session['access_token'] = _result['access_token']
     request.session.modified = True
 
-    return redirect("/home") #로그인 완료 후엔 home페이지로
+    return redirect("/home")  # 로그인 완료 후엔 home페이지로
 
 
 def kakaoLogout(request):
@@ -88,6 +92,7 @@ def home(request):
 
     context = {'logged': logged}
     return render(request, "myapp/home.html", context)
+
 
 @csrf_exempt
 def meeting(request):
@@ -173,56 +178,78 @@ def meeting2(request):
     count += 1
     return render(request, "myapp/meeting2.html")
 
+
 @csrf_exempt
 def good(request):
-
     return render(request, "myapp/good.html")
+
 
 @csrf_exempt
 def go(request):
-
     return render(request, "myapp/go.html")
 
 
 @csrf_exempt
 def alonechoose(request):
-
     return render(request, "myapp/alonechoose.html")
+
+
 @csrf_exempt
 def alonechoose2(request):
-
     return render(request, "myapp/alonechoose2.html")
+
+
 @csrf_exempt
 def army(request):
-
     return render(request, "myapp/army.html")
+
+
 @csrf_exempt
 def body(request):
-
     return render(request, "myapp/body.html")
+
+
 @csrf_exempt
 def eyes(request):
-
     return render(request, "myapp/eyes.html")
+
+
 @csrf_exempt
 def height(request):
-
     return render(request, "myapp/height.html")
+
+
 @csrf_exempt
 def hobby(request):
-
     return render(request, "myapp/hobby.html")
 
+
 def kakaoid(request):
+    access_token = request.session.get("access_token", None)
+    if access_token is None:
+        return render(request, "myapp/kakaologin.html")
+
+    account_info = requests.get("https://kapi.kakao.com/v2/user/me",
+                                headers={"Authorization": f"Bearer {access_token}"}).json()
+
     if request.method == "POST":
+        kakao_id = account_info.get("id")
+        print("kakao_id:", kakao_id)
+
+        # kakao_id를 사용하여 해당 사용자의 레코드 가져오기
+        user_info = Info.objects.filter(kakao_id=kakao_id).first()
+
         kakaotalk_id = request.POST.get("kakaoid")
         if kakaotalk_id is not None:
-            user_info = Info(kakaotalk_id=kakaotalk_id)
+            # 가져온 레코드에 kakaotalk_id 할당 및 저장
+            user_info.kakaotalk_id = kakaotalk_id
             user_info.save()
             return redirect("/success")
         else:
             return HttpResponse("ID를 입력해주세요")
+
     return render(request, "myapp/kakaoid.html")
+
 
 @csrf_exempt
 def kakao(request):
@@ -251,14 +278,17 @@ def kakao(request):
         return render(request, 'myapp/kakao.html', {'matched_profiles': matched_profiles})
 
     return render(request, 'myapp/kakao.html')  # GET 요청에 대한 처리
+
+
 @csrf_exempt
 def major(request):
-
     return render(request, "myapp/major.html")
+
+
 @csrf_exempt
 def mbti(request):
-
     return render(request, "myapp/mbti.html")
+
 
 myinfo = {}
 
@@ -286,26 +316,30 @@ def myinfo(request):
     }
 
     return render(request, "myapp/myinfo.html", context)
+
+
 @csrf_exempt
 def success(request):
-
     return render(request, "myapp/success.html")
+
 
 @csrf_exempt
 def fail(request):
-
     return render(request, "myapp/fail.html")
+
+
 @csrf_exempt
 def youinfo(request):
-
     return render(request, "myapp/youinfo.html")
+
 
 def is_valid_transition(current_page, requested_page):
     # 요청한 페이지가 현재 페이지에서의 올바른 다음 페이지인지 확인
     requested_page_int = int(requested_page)
-    if requested_page_int == current_page + 1 or current_page == requested_page_int :
+    if requested_page_int == current_page + 1 or current_page == requested_page_int:
         return True
     return False
+
 
 @csrf_exempt
 def my(request, id):
@@ -363,6 +397,7 @@ def my(request, id):
         elif index == 11:
             # hobby 필드는 복수 선택 가능이므로 리스트로 저장
             hobby_list = request.POST.getlist("hobby")
+            request.session['hobby'] = hobby_list  # 세션에 저장
         elif index == 12:
             request.session['free'] = request.POST.get("free")
         else:
@@ -384,7 +419,7 @@ def my(request, id):
                 user_info.body = request.session.get('body')
                 user_info.eyes = request.session.get('eyes')
                 user_info.face = request.session.get('face')
-                user_info.hobby = hobby_list
+                user_info.hobby = request.session.get('hobby')
                 user_info.free = request.session.get('free')
                 user_info.save()
             else:
@@ -401,7 +436,7 @@ def my(request, id):
                     body=request.session.get('body'),
                     eyes=request.session.get('body'),
                     face=request.session.get('face'),
-                    hobby=hobby_list,
+                    hobby=request.session.get('hobby'),
                     free=request.session.get('free')
                 )
             request.session.clear()
@@ -412,6 +447,7 @@ def my(request, id):
     context = {'count': index}
     return render(request, "myapp/my.html", context)
 
+
 '''
 이런 방식을 사용해도 된다
 def my(request):
@@ -421,65 +457,73 @@ def my(request):
     return HttpResponse(template.render(context,request))
 
 '''
+
+
 @csrf_exempt
 def you(request):
     article = 'you'
-    context = {"article":article}
+    context = {"article": article}
     return render(request, "myapp/you.html", context)
+
 
 @csrf_exempt
 def choose(request):
-    #홍대축제에서 만나기 누르면 choose에서는 무조건 meeting으로 redirect
+    # 홍대축제에서 만나기 누르면 choose에서는 무조건 meeting으로 redirect
     return render(request, "myapp/choose.html")
-      
+
+
 @csrf_exempt
 def matching(request):
     article = 'matching'
-    context = {"article":article}
+    context = {"article": article}
     return render(request, "myapp/matching.html", context)
-    
+
+
 @csrf_exempt
 def matching2(request):
-
     return render(request, "myapp/matching2.html")
+
+
 @csrf_exempt
 def matching3(request):
-
     return render(request, "myapp/matching3.html")
+
+
 @csrf_exempt
 def error(request):
-
     return render(request, "myapp/error.html")
+
 
 @csrf_exempt
 def use(request):
-
     return render(request, "myapp/use.html")
 
 
 @csrf_exempt
 def result(request):
-    access_token = request.session.get("access_token",None)
-    if access_token == None: #로그인 안돼있으면
-        return render(request,"myapp/kakaologin.html") #로그인 시키기
-    return render(request,"myapp/result.html")
-    
+    access_token = request.session.get("access_token", None)
+    if access_token == None:  # 로그인 안돼있으면
+        return render(request, "myapp/kakaologin.html")  # 로그인 시키기
+    return render(request, "myapp/result.html")
+
+
 @csrf_exempt
 def menu(request):
-    access_token = request.session.get("access_token",None)
-    if access_token == None: #로그인 안돼있으면
-        return render(request,"myapp/kakaologin.html") #로그인 시키기
-    return render(request,"myapp/menu.html")
+    access_token = request.session.get("access_token", None)
+    if access_token == None:  # 로그인 안돼있으면
+        return render(request, "myapp/kakaologin.html")  # 로그인 시키기
+    return render(request, "myapp/menu.html")
 
 
 from django.shortcuts import render
 from django.db.models import Q
 from .models import Info
-#from .service import UserProfileService
 
 
+# from .service import UserProfileService
 
-#소개팅에서 항목별로 값을 리스트로 받았을 때의 매칭 알고리즘
+
+# 소개팅에서 항목별로 값을 리스트로 받았을 때의 매칭 알고리즘
 def match_profiles(category01, values01, category02, values02, user_gender):
     matches = Info.objects.all()
 
@@ -537,7 +581,7 @@ def match_profiles(category01, values01, category02, values02, user_gender):
         return both_values_matches
 
 
-#미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
+# 미팅에서 항목 별로 값을 리스트로 받았을 때의 매칭 알고리즘
 def match_info_profiles(user_gender, peoplenum, ages, jobs):
     matches = Info.objects.all()
 
@@ -600,19 +644,20 @@ def perform_matching(request):
 
     return render(request, 'myapp/youinfo.html')  # GET 요청에 대한 처리
 
+
 # 미팅 매칭 함수
 def perform_info_matching(request):
     access_token = request.session.get("access_token", None)
-    if access_token == None:  # 로그인 안돼있으면
-        return render(request, "myapp/kakaologin.html")  # 로그인 시키기
+    if access_token is None:
+        return render(request, "myapp/kakaologin.html")
 
     account_info = requests.get("https://kapi.kakao.com/v2/user/me",
                                 headers={"Authorization": f"Bearer {access_token}"}).json()
+
     if request.method == 'GET':
         kakao_id = account_info.get("id")
-        print("kakao_id : ", kakao_id)
+        print("kakao_id: ", kakao_id)
 
-        # 예를 들어 사용자의 정보가 다음과 같다면:
         user_info = Info.objects.get(kakao_id=kakao_id)
         user_gender = user_info.sex
         peoplenum = user_info.peoplenum
@@ -620,9 +665,14 @@ def perform_info_matching(request):
         jobs = user_info.jobs.split(',')
 
         matched_profiles = match_info_profiles(user_gender, peoplenum, ages, jobs)
-        #matched_profiles = Info.objects.get(kakao_id=1)
-        return render(request, 'myapp/youinfo.html', {'matched_profiles': matched_profiles})
 
-    return render(request, 'myapp/youinfo.html')  # GET 요청에 대한 처리
+        if matched_profiles:
+            first_matched_profile = matched_profiles[0]
+            return render(request, 'myapp/youinfo.html', {'matched_profile': first_matched_profile})
+        else:
+            no_match_message = "매칭된 상대가 없습니다."
+            return render(request, 'myapp/youinfo.html', {'no_match_message': no_match_message})
 
-#카카오톡 아이디를 고유 값으로 받아 정보 분리해서 저장
+    return render(request, 'myapp/youinfo.html')
+
+# 카카오톡 아이디를 고유 값으로 받아 정보 분리해서 저장
