@@ -212,6 +212,18 @@ def height(request):
 def hobby(request):
 
     return render(request, "myapp/hobby.html")
+
+def kakaoid(request):
+    if request.method == "POST":
+        kakaotalk_id = request.POST.get("kakaoid")
+        if kakaotalk_id is not None:
+            user_info = Info(kakaotalk_id=kakaotalk_id)
+            user_info.save()
+            return redirect("/success")
+        else:
+            return HttpResponse("ID를 입력해주세요")
+    return render(request, "myapp/kakaoid.html")
+
 @csrf_exempt
 def kakao(request):
     access_token = request.session.get("access_token", None)
@@ -223,7 +235,22 @@ def kakao(request):
     email = account_info.get("kakao_account", {}).get("email")  # email이 있으면 email반환 없으면 빈칸 반환
     nickname = account_info.get("kakao_account", {}).get("nickname")
 
-    return render(request, "myapp/kakao.html", {'nickname': nickname})
+    if request.method == 'GET':
+        kakao_id = account_info.get("id")
+        print("kakao_id : ", kakao_id)
+
+        # 예를 들어 사용자의 정보가 다음과 같다면:
+        user_info = Info.objects.get(kakao_id=kakao_id)
+        user_gender = user_info.sex
+        peoplenum = user_info.peoplenum
+        ages = user_info.ages.split(',')
+        jobs = user_info.jobs.split(',')
+
+        matched_profiles = match_info_profiles(user_gender, peoplenum, ages, jobs)
+        # matched_profiles = Info.objects.get(kakao_id=1)
+        return render(request, 'myapp/kakao.html', {'matched_profiles': matched_profiles})
+
+    return render(request, 'myapp/kakao.html')  # GET 요청에 대한 처리
 @csrf_exempt
 def major(request):
 

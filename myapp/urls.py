@@ -27,6 +27,7 @@ urlpatterns = [
     path('my/<id>/', views.my, name='my'),
     path('choose/', views.choose, name='choose'),
     path('kakaologin/', views.kakaologin, name='kakaologin'),
+    path('kakaoid/', views.kakaoid, name='kakaoid'),
     path('kakao/', views.kakao, name='kakao'),
     path('alonechoose/', views.alonechoose, name='alonechoose'),
     path('alonechoose2/', views.alonechoose2, name='alonechoose2'),
