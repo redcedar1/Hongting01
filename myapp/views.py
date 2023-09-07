@@ -274,11 +274,11 @@ def is_valid_transition(current_page, requested_page):
     return False
 
 @csrf_exempt
-def my(request,id):
-    access_token = request.session.get("access_token",None)
-    if access_token == None: #로그인 안돼있으면
-        return render(request,"myapp/kakaologin.html") #로그인 시키기
-    
+def my(request, id):
+    access_token = request.session.get("access_token", None)
+    # if access_token == None: #로그인 안돼있으면
+    # return render(request,"myapp/kakaologin.html") #로그인 시키기
+
     account_info = requests.get("https://kapi.kakao.com/v2/user/me",
                                 headers={"Authorization": f"Bearer {access_token}"}).json()
 
@@ -288,7 +288,7 @@ def my(request,id):
         if int(id) == 1:
             if request.session.get('current_page'):
                 del request.session['current_page']
-        
+
         current_page = request.session.get('current_page', 0)
         if int(id) < current_page:
             current_page = int(id)
@@ -300,9 +300,8 @@ def my(request,id):
         # 페이지 이동을 허용하고, 세션 업데이트
         request.session['current_page'] = int(id)
 
-    
-    #자기소개 한거 있으면 자기소개 내용 불러오고 choose페이지로 넘어가게
-    
+    # 자기소개 한거 있으면 자기소개 내용 불러오고 choose페이지로 넘어가게
+
     index = int(id)
 
     if request.method == "POST":
@@ -343,7 +342,7 @@ def my(request,id):
         else:
             index = 1
 
-    index2 = index + 1
+        index2 = index + 1
         if index2 > 12:  # 모든 정보를 입력한 경우
             # 세션에 저장된 정보를 하나의 Info 객체에 저장하고 세션 초기화
             user_info = Info.objects.filter(kakao_id=kakao_id).first()
