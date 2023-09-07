@@ -1,5 +1,3 @@
-<meta charset="utf-8">
-
 <!DOCTYPE html>
 <html lang="ko">{% load static %}
   <link rel="stylesheet" href="{% static 'myapp/css/meeting2.css' %}">
@@ -12,34 +10,38 @@
         <span style="color: rgb(241, 48, 128)">원하는 조건</span>을 모두<br> 선택해주세요!</h2>
       <script>
         function checkAll() {
-    var checkjobs = document.getElementsByName("job");
-    var submit_job = [];
+          var checkjobs = document.getElementsByName("job");
+          var submit_job = [];
 
-    var checkages = document.getElementsByName("age"); // "age"로 변경
-    var submit_age = [];
+          var checkages = document.getElementsByName("age");
+          var submit_age = [];
 
-    for (var i = 0; i < checkjobs.length; i++) {
-        if (checkjobs[i].checked) {
-            submit_job.push(checkjobs[i].value);
+          for (var i = 0; i < checkjobs.length; i++) {
+            if (checkjobs[i].checked) {
+              submit_job.push(checkjobs[i].value);
+            }
+          }
+
+          for (var i = 0; i < checkages.length; i++) {
+            if (checkages[i].checked) {
+              submit_age.push(checkages[i].value);
+            }
+          }
+
+          document
+            .getElementById("submit_job")
+            .value = submit_job.join(",");
+          document
+            .getElementById("submit_age")
+            .value = submit_age.join(",");
+
+            if (submit_job.length === 0 ||  submit_age.length === 0) {
+              alert("모든 필수 정보를 입력해주세요.");
+              return false; // 폼 제출 방지
+            }
+          
+            return true; // 폼 제출 허용
         }
-    }
-
-    for (var i = 0; i < checkages.length; i++) { // "age"로 변경
-        if (checkages[i].checked) {
-            submit_age.push(checkages[i].value);
-        }
-    }
-
-    document.getElementById("submit_job").value = submit_job.join(",");
-    document.getElementById("submit_age").value = submit_age.join(",");
-
-    if (submit_job.length === 0 || submit_age.length === 0) {
-        alert("모든 필수 정보를 입력해주세요.");
-        return false; // 폼 제출 방지
-    }
-
-    return true; // 폼 제출 허용
-}
       </script>
       <form id="MyForm" action='/meeting2/' method="post" onsubmit="return checkAll()">
         <fieldset>
@@ -91,7 +93,7 @@
           </p>
         -->
             <p><strong>상대방의 평균 나이</strong></p>
-
+            
             <input type="checkbox" id="ch5" name="age" value="20-23">
             <label id="two" for="ch5">
               20대 초반

@@ -1,5 +1,3 @@
-<meta charset="utf-8">
-
 <!DOCTYPE html>
 <html lang="ko">{% load static %}
   <link rel="stylesheet" href="{% static 'myapp/css/meeting.css' %}">
@@ -30,9 +28,9 @@
           document
             .getElementById("submit_peoplenum")
             .value = submit_peoplenum.join(",");
-
+          
             var ageInput = document.getElementsByName("submit_age")[0];
-
+          
             if (submit_peoplenum.length === 0 || ageInput.value > 30) {
               alert("모든 필수 정보를 입력해주세요.");
               return false; // 폼 제출 방지
@@ -68,7 +66,7 @@
               <p>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</p>
             </span>
             <p><strong>미팅 참여자의 평균 나이</strong></p>
-
+            
               <input type="range" name="submit_age" min="19" max="31" value = "31" oninput="document.getElementById('output1').innerHTML=this.value;" />
               <br><span id="output1"></span>
           </ul>
