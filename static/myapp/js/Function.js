@@ -33,6 +33,19 @@ function validateForm(count) {
             return false;
         }
     } else if (count === 3) {
+        const armyInputs = document.querySelectorAll("[name='army']");
+        let selectedArmy = false;
+        armyInputs.forEach(input => {
+            if (input.checked) {
+                selectedArmy = true;
+            }
+        });
+        if (!selectedArmy) {
+            alert("군필 여부를 선택해주세요.");
+            return false;
+        }
+    }
+        else if (count === 4) {
         const jobInputs = document.querySelectorAll("[name='job']");
         let selectedJob = false;
         jobInputs.forEach(input => {
@@ -44,7 +57,7 @@ function validateForm(count) {
             alert("직업을 선택해주세요.");
             return false;
         }
-    } else if (count === 4) {
+    } else if (count === 5) {
         const schoolInput = document.querySelector("[name='school']");
         const majorInputs = document.querySelectorAll("[name='major']");
         
@@ -63,7 +76,7 @@ function validateForm(count) {
             alert("전공을 선택해주세요.");
             return false;
         }
-    } else if (count === 5) {
+    } else if (count === 6) {
         const mbtiInput1 = document.querySelectorAll("[name='mbti1']");
         const mbtiInput2 = document.querySelectorAll("[name='mbti2']");
         const mbtiInput3 = document.querySelectorAll("[name='mbti3']");
@@ -102,19 +115,8 @@ function validateForm(count) {
             alert("MBTI를 입력해주세요.");
             return false;
         }
-    } else if (count === 6) {
-        const armyInputs = document.querySelectorAll("[name='army']");
-        let selectedArmy = false;
-        armyInputs.forEach(input => {
-            if (input.checked) {
-                selectedArmy = true;
-            }
-        });
-        if (!selectedArmy) {
-            alert("군필 여부를 선택해주세요.");
-            return false;
-        }
-    } else if (count === 7) {
+    } 
+     else if (count === 7) {
         const heightInput = document.getElementById("input1");
         if (heightInput.value<140) {
             alert("키를 입력해주세요.");
@@ -187,10 +189,10 @@ function validateForm(count) {
 function createStr(count) {
     if(count==1) document.write("나이를 입력해주세요");
     else if(count==2) document.write("성별을 입력해주세요");
-    else if(count==3) document.write("직업을 입력해주세요"); //대학생, 대학원생, 취준생, 직장인
-    else if(count==4) document.write("학교와 학과를 입력해주세요"); //학교 인증 시스템 넣기
-    else if(count==5) document.write("mbti를 입력해주세요");
-    else if(count==6) document.write("군/미필 여부를 입력해주세요");
+    else if(count==3) document.write("군/미필 여부를 입력해주세요");
+    else if(count==4) document.write("직업을 입력해주세요"); //대학생, 대학원생, 취준생, 직장인
+    else if(count==5) document.write("학교와 학과를 입력해주세요"); //학교 인증 시스템 넣기
+    else if(count==6) document.write("mbti를 입력해주세요");
     else if(count==7) document.write("키를 입력해주세요"); //범위로(5단위)
     else if(count==8) document.write("체형을 입력해주세요"); //탭으로(마름, 보통, 통통, 근육)
     else if(count==9) document.write("유/무쌍을 입력해주세요"); //탭으로
@@ -217,12 +219,16 @@ function create(count) {
                 <input type=radio name=sex value=female id=2> <label for=2> 여성 </label>"
     }
     else if(count==3) {
+        elem.innerHTML = "<input type=radio id=1 name=army value=go > <label for=1> 군필 </label> \
+                <input type=radio id=2 name=army value=nongo> <label for=2> 미필 </label>"
+    }
+    else if(count==4) {
         elem.innerHTML = "<input type=radio name=job id=1 value=univstu> <label for = 1> 대학생 </label> \
                  <input type=radio name=job id=2 value=gradustu> <label for = 2> 대학원생 </label> \
                  <input type=radio name=job id=3 value=human > <label for = 3> 취준생 </label> \
                  <input type=radio name=job id=4 value=worker > <label for = 4> 직장인 </label> "
     }
-    else if(count==4) {
+    else if(count==5) {
         elem.innerHTML = "<input type=text name=school placeholder=OO대학교 size=10 required></input>\
         <br><br>\
         <input type=radio id=1 name=major value=liberal > <label for = 1> 문과대 </label>\
@@ -235,19 +241,15 @@ function create(count) {
         <input type=radio id=8 name=major value=medicine> <label for = 8> 의/약대 </label>\
         <input type=radio id=9 name=major value=special> <label for = 9> 특수대 </label> "
     }
-    else if(count==5) {
-        elem.innerHTML = "<input type=radio id=1 name=mbti1 value=e> <label for=1> E </label> \
-        <input type=radio id=5 name=mbti1 value=i> <label for=5> I </label>\
-        <input type=radio id=2 name=mbti2 value=s> <label for=2> S </label> \
-        <input type=radio id=6 name=mbti2 value=n> <label for=6> N </label>\
-        <input type=radio id=3 name=mbti3 value=f> <label for=3> F </label>\
-        <input type=radio id=7 name=mbti3 value=t> <label for=7> T </label>\
-        <input type=radio id=4 name=mbti4 value=j> <label for=4> J </label>\
-        <input type=radio id=8 name=mbti4 value=p> <label for=8> P </label> "
-    }
     else if(count==6) {
-        elem.innerHTML = "<input type=radio id=1 name=army value=go > <label for=1> 군필 </label> \
-                <input type=radio id=2 name=army value=nongo> <label for=2> 미필 </label>"
+        elem.innerHTML = "<input type=radio id=1 name=mbti1 value=E> <label for=1> E </label> \
+        <input type=radio id=5 name=mbti1 value=I> <label for=5> I </label>\
+        <input type=radio id=2 name=mbti2 value=S> <label for=2> S </label> \
+        <input type=radio id=6 name=mbti2 value=N> <label for=6> N </label>\
+        <input type=radio id=3 name=mbti3 value=F> <label for=3> F </label>\
+        <input type=radio id=7 name=mbti3 value=T> <label for=7> T </label>\
+        <input type=radio id=4 name=mbti4 value=J> <label for=4> J </label>\
+        <input type=radio id=8 name=mbti4 value=P> <label for=8> P </label> "
     }
     else if(count==7) {
         elem.innerHTML = "<input type=range min=139 max=200 name=height value=139 id=input1 size=10 required oninput=document.getElementById('output1').innerHTML=this.value;></input> \
@@ -270,25 +272,25 @@ function create(count) {
     }
    
     else if(count==11) {
-        elem.innerHTML = "<input type=checkbox name=hobby id=1 value=exercise > <label for = 1> ⚽운동 </label> \
-                <input type=checkbox name=hobby id=2 value=walk > <label for = 2> 🚶산책 </label>\
-                <input type=checkbox name=hobby id=3 value=show > <label for = 3> 🎞️공연관람 </label> \
-                <input type=checkbox name=hobby id=4 value=shopping > <label for = 4> 👜쇼핑 </label> \
-                <input type=checkbox name=hobby id=5 value=money > <label for = 5> 💰재태크 </label> \
-                <input type=checkbox name=hobby id=6 value=fashion > <label for = 6> 👔패션 </label>\
-                <input type=checkbox name=hobby id=7 value=pet > <label for = 7> 🐈반려동물 </label> \
-                <input type=checkbox name=hobby id=8 value=music > <label for = 8> 🎶음악감상 </label>\
-                <input type=checkbox name=hobby id=9 value=book > <label for = 9> 📖독서 </label> \
-                <input type=checkbox name=hobby id=10 value=trip > <label for = 10> ✈️여행 </label>\
-                <input type=checkbox name=hobby id=11 value=cafe > <label for = 11> ☕카페 </label> \
-                <input type=checkbox name=hobby id=12 value=game > <label for = 12> 🎮게임 </label>\
-                <input type=checkbox name=hobby id=13 value=movie > <label for = 13> 🎥영화/드라마 </label>\
-                <input type=checkbox name=hobby id=14 value=museum > <label for = 14> 🖼️전시관람 </label> \
-                <input type=checkbox name=hobby id=15 value=musical > <label for = 15> 🤸‍♂️연극/뮤지컬 </label>\
-                <input type=checkbox name=hobby id=16 value=drink > <label for = 16> 🍻술 </label> \
-                <input type=checkbox name=hobby id=17 value=performane > <label for = 17> 🎹악기연주 </label>\
-                <input type=checkbox name=hobby id=18 value=eat > <label for = 18> 🍜맛집 </label> \
-                <input type=checkbox name=hobby id=19 value=cook > <label for = 19> 🍳요리 </label>"
+        elem.innerHTML = "<input type=checkbox name=hobby id=1 value=운동 > <label for = 1> ⚽운동 </label> \
+                <input type=checkbox name=hobby id=2 value=산책 > <label for = 2> 🚶산책 </label>\
+                <input type=checkbox name=hobby id=3 value=공연관람 > <label for = 3> 🎞️공연관람 </label> \
+                <input type=checkbox name=hobby id=4 value=쇼핑 > <label for = 4> 👜쇼핑 </label> \
+                <input type=checkbox name=hobby id=5 value=재태크 > <label for = 5> 💰재태크 </label> \
+                <input type=checkbox name=hobby id=6 value=패션 > <label for = 6> 👔패션 </label>\
+                <input type=checkbox name=hobby id=7 value=반려동물 > <label for = 7> 🐈반려동물 </label> \
+                <input type=checkbox name=hobby id=8 value=음악감상 > <label for = 8> 🎶음악감상 </label>\
+                <input type=checkbox name=hobby id=9 value=독서 > <label for = 9> 📖독서 </label> \
+                <input type=checkbox name=hobby id=10 value=여행 > <label for = 10> ✈️여행 </label>\
+                <input type=checkbox name=hobby id=11 value=카페 > <label for = 11> ☕카페 </label> \
+                <input type=checkbox name=hobby id=12 value=게임 > <label for = 12> 🎮게임 </label>\
+                <input type=checkbox name=hobby id=13 value=영화/드라마 > <label for = 13> 🎥영화/드라마 </label>\
+                <input type=checkbox name=hobby id=14 value=전시관람 > <label for = 14> 🖼️전시관람 </label> \
+                <input type=checkbox name=hobby id=15 value=연극/뮤지컬 > <label for = 15> 🤸‍♂️연극/뮤지컬 </label>\
+                <input type=checkbox name=hobby id=16 value=술 > <label for = 16> 🍻술 </label> \
+                <input type=checkbox name=hobby id=17 value=악기연주 > <label for = 17> 🎹악기연주 </label>\
+                <input type=checkbox name=hobby id=18 value=맛집 > <label for = 18> 🍜맛집 </label> \
+                <input type=checkbox name=hobby id=19 value=요리 > <label for = 19> 🍳요리 </label>"
     }
     else if(count==12) {
         elem.innerHTML = "<br> <textarea name=free id=input2 cols=40 rows=10> </textarea> \

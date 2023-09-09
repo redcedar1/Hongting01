@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 class Info(models.Model):
     age = models.IntegerField(null=True, blank=True)
@@ -20,6 +22,15 @@ class Info(models.Model):
     kakao_id = models.CharField(max_length=100, blank=True, null=True)  # kakao_id를 기본 키로 설정
     free = models.TextField(null=True, blank=True)
     kakaotalk_id = models.CharField(max_length=20, null=True, blank=True)
+    you_kakao_id = models.CharField(max_length=100, blank=True, null=True)
+    matching_time = models.DateTimeField(null=True, blank=True)
+
+
+    # 매칭 성사 여부
+    matching_success = models.BooleanField(default=False)
+
+    # 매칭 신청 여부
+    matching_application = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.pk)
