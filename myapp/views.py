@@ -146,7 +146,7 @@ def meeting2(request):
             # 사용자 정보가 이미 있으면 업데이트
             user_info.jobs = ', '.join(jobs)
             user_info.ages = ', '.join(ages)
-            user_info.matching_application = True  # 매칭 신청 여부를 True로 설정
+            user_info.matching_application = 1  # 매칭 신청 여부를 True로 설정
             user_info.save()
 
         return redirect("/good/")
@@ -266,7 +266,7 @@ def success(request):
         user_info.matching_agreement = True
         user_info.save()
 
-        if user_info.matching_agreement == True and first_matched_profile.matching_agreement == True:
+        if user_info.matching_agreement is True and first_matched_profile.matching_agreement is True:
             user_info.matching_success = 1
             user_info.save()
             first_matched_profile.matching_success = 1
@@ -449,7 +449,7 @@ def matching(request):
         first_matched_profile = matched_profiles[0]
 
         if first_matched_profile:
-            user_info.matching_success = 1
+            user_info.matching_success = 0
             user_info.you_kakao_id = first_matched_profile.kakao_id
             user_info.matching_time = timezone.now()
             user_info.save()  # 사용자의 matching_success 필드를 True로 저장
@@ -457,7 +457,7 @@ def matching(request):
             # 상대방의 matching_success 필드도 업데이트
 
             if first_matched_profile.matching_success != 1:
-                first_matched_profile.matching_success = 1
+                first_matched_profile.matching_success = 0
                 first_matched_profile.you_kakao_id = kakao_id
                 first_matched_profile.matching_time = timezone.now()
                 first_matched_profile.save()
