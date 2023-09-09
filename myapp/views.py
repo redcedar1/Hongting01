@@ -435,8 +435,44 @@ def matching(request):
     
 @csrf_exempt
 def matching2(request):
+    access_token = request.session.get("access_token", None)
+    if access_token is None:
+        return render(request, "myapp/kakaologin.html")
 
-    return render(request, "myapp/matching2.html")
+    account_info = requests.get("https://kapi.kakao.com/v2/user/me",
+                                headers={"Authorization": f"Bearer {access_token}"}).json()
+
+    if request.method == 'GET':
+        kakao_id = account_info.get("id")
+        print("kakao_id: ", kakao_id)
+
+        user_info = Info.objects.get(kakao_id=kakao_id)
+        user_gender = user_info.sex
+        peoplenum = user_info.peoplenum
+        ages = user_info.ages.split(',')
+        jobs = user_info.jobs.split(',')
+
+        matched_profiles = match_info_profiles(user_gender, peoplenum, ages, jobs)
+        first_matched_profile = matched_profiles[0]
+
+        if first_matched_profile:
+            user_info.matching_success = True
+            user_info.you_kakao_id = first_matched_profile.kakao_id
+            user_info.matching_time = timezone.now()
+            user_info.save()  # 사용자의 matching_success 필드를 True로 저장
+
+            # 상대방의 matching_success 필드도 업데이트
+            first_matched_profile.matching_success = True
+            first_matched_profile.you_kakao_id = kakao_id
+            first_matched_profile.matching_time = timezone.now()
+            first_matched_profile.save()
+
+            return render(request, 'myapp/matching2.html', {'matched_profile': first_matched_profile})
+        else:
+            no_match_message = "매칭된 상대가 없습니다."
+            return render(request, 'myapp/matching2.html', {'no_match_message': no_match_message})
+
+    return render(request, 'myapp/matching2.html')
 @csrf_exempt
 def matching3(request):
 
