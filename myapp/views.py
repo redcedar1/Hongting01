@@ -413,7 +413,6 @@ def matching(request):
         matched_profiles = match_info_profiles(user_gender, peoplenum, ages, jobs)
         first_matched_profile = matched_profiles[0]
 
-
         if first_matched_profile:
             user_info.matching_success = True
             user_info.you_kakao_id = first_matched_profile.kakao_id
@@ -425,6 +424,13 @@ def matching(request):
             first_matched_profile.you_kakao_id = kakao_id
             first_matched_profile.matching_time = timezone.now()
             first_matched_profile.save()
+
+            # 매칭 성사 후 한 시간이 지났는지 확인
+            time_elapsed = timezone.now() - user_info.matching_time
+            if time_elapsed.total_seconds() >= 3600:
+                user_info.matching_success = False
+                first_matched_profile.matching_success = False
+                pass
 
             return render(request, 'myapp/matching.html', {'matched_profile': first_matched_profile})
         else:
@@ -466,6 +472,13 @@ def matching2(request):
             first_matched_profile.you_kakao_id = kakao_id
             first_matched_profile.matching_time = timezone.now()
             first_matched_profile.save()
+
+            # 매칭 성사 후 한 시간이 지났는지 확인
+            time_elapsed = timezone.now() - user_info.matching_time
+            if time_elapsed.total_seconds() >= 3600:
+                user_info.matching_success = False
+                first_matched_profile.matching_success = False
+                pass
 
             return render(request, 'myapp/matching2.html', {'matched_profile': first_matched_profile})
         else:
