@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-
 class Info(models.Model):
     age = models.IntegerField(null=True, blank=True)
     sex = models.CharField(max_length=10, null=True, blank=True)
@@ -25,12 +24,14 @@ class Info(models.Model):
     you_kakao_id = models.CharField(max_length=100, blank=True, null=True)
     matching_time = models.DateTimeField(null=True, blank=True)
 
-
-    # 매칭 성사 여부
-    matching_success = models.BooleanField(default=False)
+    # 매칭 성사 여부 (IntegerField로 변경)
+    matching_success = models.IntegerField(default=0)
 
     # 매칭 신청 여부
-    matching_application = models.BooleanField(default=False)
+    matching_application = models.IntegerField(default=0)
+
+    # 매칭 동의 여부
+    matching_agreement = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.pk)

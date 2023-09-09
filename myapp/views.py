@@ -140,7 +140,7 @@ def meeting2(request):
                 kakao_id=kakao_id,
                 jobs=', '.join(jobs),
                 ages=', '.join(ages),
-                matching_application=True  # 매칭 신청 여부를 True로 설정
+                matching_application=1  # 매칭 신청 여부를 True로 설정
             )
         else:
             # 사용자 정보가 이미 있으면 업데이트
@@ -241,6 +241,41 @@ def myinfo(request):
     return render(request, "myapp/myinfo.html",context)
 @csrf_exempt
 def success(request):
+    access_token = request.session.get("access_token", None)
+    if access_token == None:  # 로그인 안돼있으면
+        return render(request, "myapp/kakaologin.html")  # 로그인 시키기
+
+    account_info = requests.get("https://kapi.kakao.com/v2/user/me",
+                                headers={"Authorization": f"Bearer {access_token}"}).json()
+
+    kakao_id = account_info.get("id")
+
+    if request.method == 'GET':
+        kakao_id = account_info.get("id")
+        print("kakao_id: ", kakao_id)
+
+        user_info = Info.objects.get(kakao_id=kakao_id)
+        user_gender = user_info.sex
+        peoplenum = user_info.peoplenum
+        ages = user_info.ages.split(',')
+        jobs = user_info.jobs.split(',')
+
+        matched_profiles = match_info_profiles(user_gender, peoplenum, ages, jobs)
+        first_matched_profile = matched_profiles[0]
+
+        user_info.matching_agreement = True
+        user_info.save()
+
+        if user_info.matching_agreement == True and first_matched_profile.matching_agreement == True:
+            user_info.matching_success = 1
+            user_info.save()
+            first_matched_profile.matching_success = 1
+            first_matched_profile.save()
+
+    return render(request, 'myapp/matching.html')
+
+
+
 
     return render(request, "myapp/success.html")
 
@@ -414,26 +449,31 @@ def matching(request):
         first_matched_profile = matched_profiles[0]
 
         if first_matched_profile:
-            user_info.matching_success = True
+            user_info.matching_success = 1
             user_info.you_kakao_id = first_matched_profile.kakao_id
             user_info.matching_time = timezone.now()
             user_info.save()  # 사용자의 matching_success 필드를 True로 저장
 
             # 상대방의 matching_success 필드도 업데이트
-            first_matched_profile.matching_success = True
-            first_matched_profile.you_kakao_id = kakao_id
-            first_matched_profile.matching_time = timezone.now()
-            first_matched_profile.save()
+
+            if first_matched_profile.matching_success != 1:
+                first_matched_profile.matching_success = 1
+                first_matched_profile.you_kakao_id = kakao_id
+                first_matched_profile.matching_time = timezone.now()
+                first_matched_profile.save()
+
+            else:
+                user_info.matching_success = 0
+                user_info.you_kakao_id = ''
+                user_info.save()
 
             # 매칭 성사 후 한 시간이 지났는지 확인
-            time_elapsed = timezone.now() - user_info.matching_time
-            if time_elapsed.total_seconds() >= 3600:
-                user_info.matching_success = False
-                first_matched_profile.matching_success = False
-                pass
+
 
             return render(request, 'myapp/matching.html', {'matched_profile': first_matched_profile})
         else:
+
+            user_info.matching_success = 2
             no_match_message = "매칭된 상대가 없습니다."
             return render(request, 'myapp/matching.html', {'no_match_message': no_match_message})
 
@@ -462,26 +502,31 @@ def matching2(request):
         first_matched_profile = matched_profiles[0]
 
         if first_matched_profile:
-            user_info.matching_success = True
+            user_info.matching_success = 1
             user_info.you_kakao_id = first_matched_profile.kakao_id
             user_info.matching_time = timezone.now()
             user_info.save()  # 사용자의 matching_success 필드를 True로 저장
 
             # 상대방의 matching_success 필드도 업데이트
-            first_matched_profile.matching_success = True
-            first_matched_profile.you_kakao_id = kakao_id
-            first_matched_profile.matching_time = timezone.now()
-            first_matched_profile.save()
+
+            if first_matched_profile != 1:
+                first_matched_profile.matching_success = 1
+                first_matched_profile.you_kakao_id = kakao_id
+                first_matched_profile.matching_time = timezone.now()
+                first_matched_profile.save()
+
+            else:
+                user_info.matching_success = 0
+                user_info.you_kakao_id = ''
+                user_info.save()
 
             # 매칭 성사 후 한 시간이 지났는지 확인
-            time_elapsed = timezone.now() - user_info.matching_time
-            if time_elapsed.total_seconds() >= 3600:
-                user_info.matching_success = False
-                first_matched_profile.matching_success = False
-                pass
+
 
             return render(request, 'myapp/matching2.html', {'matched_profile': first_matched_profile})
         else:
+
+            user_info.matching_success = 2
             no_match_message = "매칭된 상대가 없습니다."
             return render(request, 'myapp/matching2.html', {'no_match_message': no_match_message})
 

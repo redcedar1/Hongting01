@@ -103,9 +103,10 @@
         }
 
         var peoplenum = {{ user_info.peoplenum }};
-        numcheck(peoplenum);
+        var suc= {{ matched_profile.matching_success }};
+        numcheck(peoplenum, suc);
 
-         function numcheck(peoplenum) {
+         function numcheck(peoplenum, suc) {
           var box2 = document.getElementById("box2");
           var box3 = document.getElementById("box3");
           var box4 = document.getElementById("box4");
@@ -118,14 +119,14 @@
           var box11 = document.getElementById("box11");
           var box12 = document.getElementById("box12");
           var box13 = document.getElementById("box23");
-          if(peoplenum===1) {
+          if(peoplenum===1 && suc===1) {
             box2.style.opacity=1
             box4.style.opacity=1;
 
             box3.style.pointerEvents="all";
             box4.style.pointerEvents="all";
           }
-          else if(peoplenum===2) {
+          else if(peoplenum===2 && suc===1) {
             box5.style.opacity=1;
             box6.style.opacity=1;
             box7.style.opacity=1;
@@ -133,7 +134,7 @@
             box6.style.pointerEvents="all";
             box7.style.pointerEvents="all";
           }
-          else if(peoplenum===3) {
+          else if(peoplenum===3 && suc===1) {
             box8.style.opacity=1;
             box9.style.opacity=1;
             box10.style.opacity=1;
@@ -141,7 +142,7 @@
             box9.style.pointerEvents="all";
             box10.style.pointerEvents="all";
           }
-          else if(peoplenum===4) {
+          else if(peoplenum===4 && suc===1) {
             box11.style.opacity=1;
             box12.style.opacity=1;
             box13.style.opacity=1;

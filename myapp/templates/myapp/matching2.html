@@ -6,13 +6,11 @@
 
   <script>
     function matchingResult() {
-      if (/* result=success */
-      true) 
+      if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==1) 
         document
           .getElementById("inner1")
           .innerHTML = "<b>♥새로운<span id=one> 인연</span>을 만나봐요♥</b>";
-      else if (/* result=fail */
-      true) 
+      else if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==2) 
         document
           .getElementById("inner1")
           .innerHTML = "<b>매칭이 성사되지 않았습니다</b>";
@@ -22,22 +20,20 @@
 
 
     function check() {
-      if (/* result=success */
-      true) {
+      if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==1) {
         document
         .getElementById("inner2")
         .innerHTML = "<button type=button onclick=goInfo()> 상대정보확인";
-      } else if (/* result=fail */
-      false) {
+      } else if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==2) {
         document
         .getElementById("inner2")
-        .innerHTML = "<p>우선순위를 폭넓게 설정하면<br>매칭확률이 높아져요</p>";
+        .innerHTML = "<p>새로운 매칭 결과를<br>기다려주세요</p>";
       } else 
         document.write("")
     }
 
     function meetCheck(check) {
-      if (true/*check==매칭 됐으면*/) {
+      if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==1) {
         document
           .getElementById("box5")
           .style
@@ -54,7 +50,7 @@
           .getElementById("box8")
           .style
           .opacity = 0;
-      } else if (true/*check==매칭 안됐으면*/) {
+      } else if ({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==2) {
         document
           .getElementById("box5")
           .style

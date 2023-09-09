@@ -16,22 +16,22 @@
         document
           .getElementById("inner1")
           .innerHTML = "<b><font color='violet'>2일차</font></b>"; */
-      if(/*매칭 안했으면*/false) {
+      if({{matched_profile.matching_application}}==0 && {{matched_profile.matching_success}}==0) {
         document
           .getElementById("inner1")
           .innerHTML = "<b>매칭을<font color='violet'> 신청</font> 해주세요!</b>";
       }
-      else if(/*매칭 했으면*/false) {
+      else if({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==0) {
         document
         .getElementById("inner1")
         .innerHTML = "<b>♥매칭이<font color='violet'> 진행</font> 중입니다♥</b>";
       }
-      else if(/*매칭 됐으면*/true) {
+      else if({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==1) {
         document
         .getElementById("inner1")
         .innerHTML = "<b>♥매칭이<span id=one> 성사</span> 되었습니다♥</b>";
       }
-      else if(/*매칭 안됐으면*/false) {
+      else if({{matched_profile.matching_application}}==1 && {{matched_profile.matching_success}}==2) {
         document
         .getElementById("inner1")
         .innerHTML = "<b>매칭이 성사되지 않았습니다</b>";
@@ -138,7 +138,7 @@
         </div>
 
         <script>
-          meetCheck();
+          //meetCheck();
         </script>
       </div>
       <script>
@@ -158,6 +158,18 @@
 
         function goInfo() {
           location.href = '/youinfo/';
+        }
+
+        var appli = {{ matched_profile.matching_application }};
+        var suc= {{ matched_profile.matching_success }};
+       gomeeting(appli, suc);
+
+        function gomeeting(appli, suc) {
+          var box6 = document.getElementById("box6");
+          if(appli==1 && suc==1) {
+            box6.style.opacity=1;
+            box6.style.pointerEvents="all";
+          }
         }
       </script>
     </body>

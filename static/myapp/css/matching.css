@@ -29,7 +29,7 @@
     box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
     border-radius: 30%;
     text-align: center;
-    opacity: 0;
+    opacity: 0.5;
     pointer-events: none;
     line-height: 63.2px;
 }
@@ -43,7 +43,8 @@
     box-shadow: 0 5px 5px rgba(243, 221, 110, 0.2);
     border-radius: 30%;
     text-align: center;
-    opacity: 0;
+    opacity: 0.5;
+    pointer-events: none;
     line-height: 63.2px;
 }
 #box7 {
