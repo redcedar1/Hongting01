@@ -1,6 +1,6 @@
 from allauth.socialaccount.models import SocialAccount
 import ast
-from django.shortcuts import render,HttpResponse,redirect,get_object_or_404
+from django.shortcuts import render,HttpResponse,redirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from .models import Info
@@ -23,7 +23,7 @@ def kakaologin(request):
         account_info = requests.get("https://kapi.kakao.com/v2/user/me",
                                     headers={"Authorization": f"Bearer {access_token}"}).json()
         kakao_id = account_info.get("id")
-        try:
+        try:#어차피 access_token이 있어야 하니까 예외 처리는 없어도 될 듯
             user_profile = Info.objects.get(kakao_id=kakao_id)  # 카카오톡 ID를 사용하여 사용자 정보 조회
             #print(kakao_id) 지운다?
             #context['user_profile'] = user_profile 지운다?
@@ -98,9 +98,9 @@ def meeting(request):
         avgage = request.POST.get('submit_age')
 
         kakao_id = account_info.get("id")
-        user_info = Info.objects.filter(kakao_id=kakao_id).first()
+        user_info = Info.objects.get(kakao_id=kakao_id)
 
-        if user_info is None:
+        if user_info is None:#이미 로그인 한 상태라 레코드 새로 생성하는 예외처리는 없어도 될 듯
         # 사용자 정보가 없으면 새로 생성하고 저장
             user_info = Info.objects.create(
             kakao_id=kakao_id,
@@ -132,9 +132,9 @@ def meeting2(request):
 
         kakao_id = account_info.get("id")
 
-        user_info = Info.objects.filter(kakao_id=kakao_id).first()
+        user_info = Info.objects.get(kakao_id=kakao_id)
 
-        if user_info is None:
+        if user_info is None:#이미 로그인 한 상태라 레코드 새로 생성하는 예외처리는 없어도 될 듯
             # 사용자 정보가 없으면 새로 생성하고 저장
             user_info = Info.objects.create(
                 kakao_id=kakao_id,
@@ -235,7 +235,7 @@ def myinfo(request):
     account_info = requests.get("https://kapi.kakao.com/v2/user/me", headers={"Authorization": f"Bearer {access_token}"}).json()
     kakao_id = account_info.get("id")
     
-    user_profile = get_object_or_404(Info, kakao_id=kakao_id)
+    user_profile = Info.objects.get(kakao_id=kakao_id)#user_info로 바꿀까?
     context = {'user_profile': user_profile,  # 사용자 정보를 context에 추가
     }
     return render(request, "myapp/myinfo.html",context)
@@ -247,8 +247,6 @@ def success(request):
 
     account_info = requests.get("https://kapi.kakao.com/v2/user/me",
                                 headers={"Authorization": f"Bearer {access_token}"}).json()
-
-    kakao_id = account_info.get("id")
 
     if request.method == 'GET':
         kakao_id = account_info.get("id")
@@ -346,7 +344,7 @@ def my(request, id):
         elif index == 5:
             request.session['school'] = request.POST.get("school")
             request.session['major'] = request.POST.get("major")
-        elif index == 6:
+        elif index == 6:#html에서 id값이 다르면 디비에서 다른 레코드로 되어서 반복문으로 한 글자씩 받아서 추가
             selected_mbti = []
             for i in range(1, 5):
                 mbti_value = request.POST.get(f"mbti{i}")
@@ -375,7 +373,7 @@ def my(request, id):
         index2 = index + 1
         if index2 > 12:  # 모든 정보를 입력한 경우
             # 세션에 저장된 정보를 하나의 Info 객체에 저장하고 세션 초기화
-            user_info = Info.objects.filter(kakao_id=kakao_id).first()
+            user_info = Info.objects.get(kakao_id=kakao_id)
             if user_info:
                 user_info.age = request.session.get('age')
                 user_info.sex = request.session.get('sex')
@@ -391,7 +389,7 @@ def my(request, id):
                 user_info.hobby = request.session.get('hobby')
                 user_info.free = request.session.get('free')
                 user_info.save()
-            else:
+            else:#이미 로그인 한 상태라 레코드 새로 생성하는 예외처리는 없어도 될 듯
                 myinfo = Info.objects.create(
                     kakao_id=kakao_id,
                     age=request.session.get('age'),
@@ -474,7 +472,7 @@ def matching(request):
         else:
 
             user_info.matching_success = 2
-            no_match_message = "매칭된 상대가 없습니다."
+            no_match_message = "매칭된 상대가 없습니다."#앞에서 예외처리 했으니까 지울까?
             return render(request, 'myapp/matching.html', {'no_match_message': no_match_message})
 
     return render(request, 'myapp/matching.html')
@@ -527,7 +525,7 @@ def matching2(request):
         else:
 
             user_info.matching_success = 2
-            no_match_message = "매칭된 상대가 없습니다."
+            no_match_message = "매칭된 상대가 없습니다."#앞에서 예외처리 했으니까 지울까?
             return render(request, 'myapp/matching2.html', {'no_match_message': no_match_message})
 
     return render(request, 'myapp/matching2.html')
@@ -575,7 +573,7 @@ def kakaoid(request):
         kakao_id = account_info.get("id")
 
         # kakao_id를 사용하여 해당 사용자의 레코드 가져오기
-        user_info = Info.objects.filter(kakao_id=kakao_id).first()
+        user_info = Info.objects.get(kakao_id=kakao_id)
 
         kakaotalk_id = request.POST.get("kakaoid")
         if kakaotalk_id is not None:
@@ -583,7 +581,7 @@ def kakaoid(request):
             user_info.kakaotalk_id = kakaotalk_id
             user_info.save()
             return redirect("/go")
-        else:
+        else:#예외처리 중복이니까 지울까?
             return HttpResponse("ID를 입력해주세요")
 
     return render(request, "myapp/kakaoid.html")
@@ -626,11 +624,6 @@ def match_info_profiles(user_gender, peoplenum, ages, jobs):
 
         if either_values_matches.exists():
             return either_values_matches
-        else:
-            # 셋 중 하나만 일치하는 프로필 필터
-            return peoplenum_matches.filter(
-                Q(ages_filter) | Q(job__in=jobs)
-            )
 
 def perform_info_matching(request):
     access_token = request.session.get("access_token", None)

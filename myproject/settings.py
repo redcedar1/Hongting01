@@ -12,7 +12,23 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+
+from celery.schedules import crontab
+
 from myproject import my_settings
+import celery
+from celery import Celery
+app = Celery('your_project')
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Django-celery-beat 설정
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis 또는 다른 메시지 브로커 사용
+CELERY_BEAT_SCHEDULE = {
+    'your_task_name': {
+        'task': 'myapp.tasks.update_matching_application',
+        'schedule': crontab(minute=0, hour='*'),  # 정각에 실행
+    },
+}
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
